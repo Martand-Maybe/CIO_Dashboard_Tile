@@ -7,73 +7,63 @@
 
     <div class="dashboard-grid">
       <section class="dashboard-section">
-        <h2 class="section-title">
-          <span class="icon">📊</span>
-          Service KPIs
-        </h2>
+        <h2 class="section-title">Key Metrics</h2>
         <div class="kpi-row">
-          <KpiCard title="Total Incidents" :value="42" class="kpi-card" />
-          <KpiCard title="Active Incidents" :value="8" class="kpi-card" />
-          <KpiCard title="Avg. Resolution Time" :value="'2.5h'" class="kpi-card" />
-          <KpiCard title="SLA Compliance" :value="'98.5%'" class="kpi-card" />
+          <KpiCard title="Ticket Volume (Last 7 Days)" :value="'1,240'">
+            <template #status><span class="status-indicator yellow"></span></template>
+          </KpiCard>
+          <KpiCard title="SLA Compliance %" :value="'96.4%'">
+            <template #status><span class="status-indicator green"></span></template>
+          </KpiCard>
+          <KpiCard title="MTTR" :value="'2.1 hrs'">
+            <template #status><span class="status-indicator green"></span></template>
+          </KpiCard>
+          <KpiCard title="Customer Satisfaction" :value="'4.2 / 5'">
+            <template #status><span class="status-indicator green"></span></template>
+          </KpiCard>
         </div>
       </section>
 
       <section class="dashboard-section">
-        <h2 class="section-title">
-          <span class="icon">🎯</span>
-          Performance
-        </h2>
-        <div class="kpi-row">
-          <KpiCard title="Response Time" :value="'15m'" class="kpi-card" />
-          <KpiCard title="Resolution Time" :value="'2.5h'" class="kpi-card" />
-          <KpiCard title="First Contact" :value="'92%'" class="kpi-card" />
-          <KpiCard title="Customer Satisfaction" :value="'4.8/5'" class="kpi-card" />
-        </div>
-      </section>
-
-      <section class="dashboard-section">
-        <h2 class="section-title">
-          <span class="icon">📈</span>
-          Trends
-        </h2>
-        <div class="kpi-row">
-          <KpiCard title="Incidents (MTD)" :value="42" class="kpi-card" />
-          <KpiCard title="Resolved" :value="34" class="kpi-card" />
-          <KpiCard title="In Progress" :value="8" class="kpi-card" />
-          <KpiCard title="Prevented" :value="15" class="kpi-card" />
-        </div>
+        <h2 class="section-title">Top 3 Issues</h2>
+        <div class="top-issues">VPN, Email delays, Printer queue</div>
       </section>
 
       <section class="dashboard-section full-width">
-        <h2 class="section-title"><span class="icon">📊</span> Service Analytics</h2>
+        <h2 class="section-title">Service Analytics</h2>
         <div class="chart-grid">
-          <div class="chart-container clickable" @click="showModal = 'incidentsBar'">
-            <IncidentsBarChart />
+          <div class="chart-container clickable" @click="showModal = 'ticketVolume'">
+            <TicketVolumeTrendChart />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'countryContributors'">
-            <CountryContributorsPie />
+          <div class="chart-container clickable" @click="showModal = 'slaCompliance'">
+            <SLAComplianceTrendChart />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'incidentsByFunction'">
-            <IncidentsByFunction />
+          <div class="chart-container clickable" @click="showModal = 'mttrTrend'">
+            <MTTRTrendChart />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'feedbackGauge'">
-            <FeedbackGauge />
+          <div class="chart-container clickable" @click="showModal = 'customerSatisfaction'">
+            <CustomerSatisfactionGauge />
+          </div>
+          <div class="chart-container clickable" @click="showModal = 'topIssues'">
+            <TopIssuesPieChart />
           </div>
         </div>
       </section>
 
-      <ChartModal v-if="showModal === 'incidentsBar'" @close="showModal = null">
-        <IncidentsBarChart />
+      <ChartModal v-if="showModal === 'ticketVolume'" @close="showModal = null">
+        <TicketVolumeTrendChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'countryContributors'" @close="showModal = null">
-        <CountryContributorsPie />
+      <ChartModal v-if="showModal === 'slaCompliance'" @close="showModal = null">
+        <SLAComplianceTrendChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'incidentsByFunction'" @close="showModal = null">
-        <IncidentsByFunction />
+      <ChartModal v-if="showModal === 'mttrTrend'" @close="showModal = null">
+        <MTTRTrendChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'feedbackGauge'" @close="showModal = null">
-        <FeedbackGauge />
+      <ChartModal v-if="showModal === 'customerSatisfaction'" @close="showModal = null">
+        <CustomerSatisfactionGauge />
+      </ChartModal>
+      <ChartModal v-if="showModal === 'topIssues'" @close="showModal = null">
+        <TopIssuesPieChart />
       </ChartModal>
     </div>
   </div>
@@ -81,26 +71,28 @@
 
 <script>
 import KpiCard from '../components/KpiCard.vue'
-import IncidentsBarChart from '../components/IncidentsBarChart.vue'
-import CountryContributorsPie from '../components/CountryContributorsPie.vue'
-import IncidentsByFunction from '../components/IncidentsByFunction.vue'
-import FeedbackGauge from '../components/FeedbackGauge.vue'
+import TicketVolumeTrendChart from '../components/TicketVolumeTrendChart.vue'
+import SLAComplianceTrendChart from '../components/SLAComplianceTrendChart.vue'
+import MTTRTrendChart from '../components/MTTRTrendChart.vue'
+import CustomerSatisfactionGauge from '../components/CustomerSatisfactionGauge.vue'
+import TopIssuesPieChart from '../components/TopIssuesPieChart.vue'
 import ChartModal from '../components/ChartModal.vue'
 
 export default {
   name: 'ServiceQuality',
   components: {
     KpiCard,
-    IncidentsBarChart,
-    CountryContributorsPie,
-    IncidentsByFunction,
-    FeedbackGauge,
+    TicketVolumeTrendChart,
+    SLAComplianceTrendChart,
+    MTTRTrendChart,
+    CustomerSatisfactionGauge,
+    TopIssuesPieChart,
     ChartModal
   },
   data() {
     return {
       showModal: null
-    };
+    }
   }
 }
 </script>
@@ -179,18 +171,34 @@ export default {
   border-bottom: 1px solid #3a3b3c;
 }
 
-.icon {
-  font-size: 1.25rem;
-  background: linear-gradient(135deg, #50e3c2 0%, #2b6cb0 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .kpi-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  border: 2px solid #222;
+}
+.status-indicator.green {
+  background: #50e3c2;
+  box-shadow: 0 0 4px #50e3c2;
+}
+.status-indicator.yellow {
+  background: #f6ad55;
+  box-shadow: 0 0 4px #f6ad55;
+}
+
+.top-issues {
+  color: #e4e6eb;
+  font-size: 1rem;
+  padding: 0.5rem 0;
 }
 
 .chart-grid {
@@ -231,15 +239,12 @@ export default {
   .service-quality {
     padding: 1rem;
   }
-  
   .main-title {
     font-size: 1.75rem;
   }
-  
   .dashboard-section {
     padding: 1rem;
   }
-  
   .dashboard-header {
     padding: 1rem;
     margin-bottom: 1rem;

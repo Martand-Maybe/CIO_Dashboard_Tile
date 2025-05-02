@@ -1,75 +1,92 @@
 <template>
     <div class="network-dashboard">
       <div class="dashboard-header">
-        <h1 class="main-title">Network Monitoring Dashboard</h1>
+        <h1 class="main-title">Network Dashboard</h1>
         <div class="last-updated">Last updated: {{ new Date().toLocaleString() }}</div>
       </div>
   
       <div class="dashboard-grid">
         <section class="dashboard-section">
-          <h2 class="section-title"><span class="icon">📶</span> Network KPIs</h2>
+          <h2 class="section-title">Key Metrics</h2>
           <div class="kpi-row">
-            <KpiCard title="Total Alerts" :value="37" />
-            <KpiCard title="Open Alerts" :value="9" />
-            <KpiCard title="High Priority Alerts" :value="1" />
-            <KpiCard title="Availability" :value="'100%'" />
-            <KpiCard title="Total Sites Monitored" :value="61" />
-            <KpiCard title="Sites with Alerts" :value="8" />
+            <KpiCard title="Network Uptime" :value="'99.98%'">
+              <template #status><span class="status-indicator green"></span></template>
+            </KpiCard>
+            <KpiCard title="Packet Loss %" :value="'0.2%'">
+              <template #status><span class="status-indicator green"></span></template>
+            </KpiCard>
+            <KpiCard title="High Latency Sites" :value="'2 (Chennai, Frankfurt)'">
+              <template #status><span class="status-indicator yellow"></span></template>
+            </KpiCard>
+            <KpiCard title="Bandwidth Utilization" :value="'72%'">
+              <template #status><span class="status-indicator green"></span></template>
+            </KpiCard>
           </div>
         </section>
   
+        <section class="dashboard-section">
+          <h2 class="section-title">Top Incident Type</h2>
+          <div class="top-incident">WAN link fail</div>
+        </section>
+  
         <section class="dashboard-section full-width">
-          <h2 class="section-title"><span class="icon">📈</span> Network Monitoring</h2>
+          <h2 class="section-title">Network Analytics</h2>
           <div class="chart-grid">
-            <div class="chart-container clickable" @click="showModal = 'alerts'">
-              <NetworkAlertsChart />
+            <div class="chart-container clickable" @click="showModal = 'uptimeTrend'">
+              <UptimeTrendChart />
             </div>
-            <div class="chart-container clickable" @click="showModal = 'sites'">
-              <SitesWithAlertsPie />
+            <div class="chart-container clickable" @click="showModal = 'packetLossTrend'">
+              <PacketLossTrendChart />
             </div>
-            <div class="chart-container clickable" @click="showModal = 'topSites'">
-              <TopAlertingSitesBar />
+            <div class="chart-container clickable" @click="showModal = 'latencySites'">
+              <HighLatencySitesChart />
+            </div>
+            <div class="chart-container clickable" @click="showModal = 'bandwidthUtilization'">
+              <BandwidthUtilizationGauge />
+            </div>
+            <div class="chart-container clickable" @click="showModal = 'incidentType'">
+              <IncidentTypePieChart />
             </div>
           </div>
-        </section>
-  
-        <section class="dashboard-section full-width">
-          <h2 class="section-title"><span class="icon">📊</span> Sites with Alerts</h2>
-          <SitesWithAlertsPie class="chart-container" />
-        </section>
-  
-        <section class="dashboard-section full-width">
-          <h2 class="section-title"><span class="icon">🏢</span> Top 5 Alerting Sites</h2>
-          <TopAlertingSitesBar class="chart-container" />
         </section>
       </div>
 
-      <ChartModal v-if="showModal === 'alerts'" @close="showModal = null">
-        <NetworkAlertsChart />
+      <ChartModal v-if="showModal === 'uptimeTrend'" @close="showModal = null">
+        <UptimeTrendChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'sites'" @close="showModal = null">
-        <SitesWithAlertsPie />
+      <ChartModal v-if="showModal === 'packetLossTrend'" @close="showModal = null">
+        <PacketLossTrendChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'topSites'" @close="showModal = null">
-        <TopAlertingSitesBar />
+      <ChartModal v-if="showModal === 'latencySites'" @close="showModal = null">
+        <HighLatencySitesChart />
+      </ChartModal>
+      <ChartModal v-if="showModal === 'bandwidthUtilization'" @close="showModal = null">
+        <BandwidthUtilizationGauge />
+      </ChartModal>
+      <ChartModal v-if="showModal === 'incidentType'" @close="showModal = null">
+        <IncidentTypePieChart />
       </ChartModal>
     </div>
   </template>
   
   <script>
   import KpiCard from '../components/KpiCard.vue'
-  import NetworkAlertsChart from '../components/NetworkAlertsChart.vue'
-  import SitesWithAlertsPie from '../components/SitesWithAlertsPie.vue'
-  import TopAlertingSitesBar from '../components/TopAlertingSitesBar.vue'
+  import UptimeTrendChart from '../components/UptimeTrendChart.vue'
+  import PacketLossTrendChart from '../components/PacketLossTrendChart.vue'
+  import HighLatencySitesChart from '../components/HighLatencySitesChart.vue'
+  import BandwidthUtilizationGauge from '../components/BandwidthUtilizationGauge.vue'
+  import IncidentTypePieChart from '../components/IncidentTypePieChart.vue'
   import ChartModal from '../components/ChartModal.vue'
   
   export default {
-    name: 'Network',
+    name: 'NetworkDashboard',
     components: {
       KpiCard,
-      NetworkAlertsChart,
-      SitesWithAlertsPie,
-      TopAlertingSitesBar,
+      UptimeTrendChart,
+      PacketLossTrendChart,
+      HighLatencySitesChart,
+      BandwidthUtilizationGauge,
+      IncidentTypePieChart,
       ChartModal
     },
     data() {
@@ -154,18 +171,34 @@
     border-bottom: 1px solid #3a3b3c;
   }
   
-  .icon {
-    font-size: 1.25rem;
-    background: linear-gradient(135deg, #50e3c2 0%, #2b6cb0 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  
   .kpi-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 1rem;
+  }
+  
+  .status-indicator {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    border: 2px solid #222;
+  }
+  .status-indicator.green {
+    background: #50e3c2;
+    box-shadow: 0 0 4px #50e3c2;
+  }
+  .status-indicator.yellow {
+    background: #f6ad55;
+    box-shadow: 0 0 4px #f6ad55;
+  }
+  
+  .top-incident {
+    color: #e4e6eb;
+    font-size: 1rem;
+    padding: 0.5rem 0;
   }
   
   .chart-grid {
@@ -221,21 +254,9 @@
     }
   }
   
-  @media (min-width: 1200px) {
-    .dashboard-section.full-width {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
-    
-    .dashboard-section.full-width .section-title {
-      grid-column: 1 / -1;
-    }
-  }
-  
   @media (min-width: 1600px) {
     .chart-grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
     }
   }
   </style>

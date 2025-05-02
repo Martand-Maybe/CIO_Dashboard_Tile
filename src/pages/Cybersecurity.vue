@@ -1,5 +1,5 @@
 <template>
-  <div class="cybersecurity">
+  <div class="cybersecurity-dashboard">
     <div class="dashboard-header">
       <h1 class="main-title">Cybersecurity Dashboard</h1>
       <div class="last-updated">Last updated: {{ new Date().toLocaleString() }}</div>
@@ -7,73 +7,61 @@
 
     <div class="dashboard-grid">
       <section class="dashboard-section">
-        <h2 class="section-title">
-          <span class="icon">🛡️</span>
-          Security KPIs
-        </h2>
+        <h2 class="section-title">Key Metrics</h2>
         <div class="kpi-row">
-          <KpiCard title="Active Threats" :value="12" class="kpi-card" />
-          <KpiCard title="Vulnerabilities" :value="45" class="kpi-card" />
-          <KpiCard title="Security Score" :value="'92%'" class="kpi-card" />
-          <KpiCard title="Incidents (MTD)" :value="8" class="kpi-card" />
-        </div>
-      </section>
-
-      <section class="dashboard-section">
-        <h2 class="section-title">
-          <span class="icon">🔍</span>
-          Threat Analysis
-        </h2>
-        <div class="kpi-row">
-          <KpiCard title="Critical" :value="3" class="kpi-card" />
-          <KpiCard title="High" :value="5" class="kpi-card" />
-          <KpiCard title="Medium" :value="15" class="kpi-card" />
-          <KpiCard title="Low" :value="22" class="kpi-card" />
-        </div>
-      </section>
-
-      <section class="dashboard-section">
-        <h2 class="section-title">
-          <span class="icon">📊</span>
-          Performance
-        </h2>
-        <div class="kpi-row">
-          <KpiCard title="Detection Rate" :value="'98.5%'" class="kpi-card" />
-          <KpiCard title="Response Time" :value="'15m'" class="kpi-card" />
-          <KpiCard title="False Positives" :value="'2.3%'" class="kpi-card" />
-          <KpiCard title="Compliance" :value="'99.9%'" class="kpi-card" />
+          <KpiCard title="Critical Incidents" :value="'1 (Phishing)'">
+            <template #status><span class="status-indicator yellow"></span></template>
+          </KpiCard>
+          <KpiCard title="Patch Compliance" :value="'92.5%'">
+            <template #status><span class="status-indicator yellow"></span></template>
+          </KpiCard>
+          <KpiCard title="Endpoint Threats Detected" :value="'34'">
+            <template #status><span class="status-indicator yellow"></span></template>
+          </KpiCard>
+          <KpiCard title="SIEM Alert Volume" :value="'820'">
+            <template #status><span class="status-indicator yellow"></span></template>
+          </KpiCard>
+          <KpiCard title="MFA Adoption Rate" :value="'99.4%'">
+            <template #status><span class="status-indicator green"></span></template>
+          </KpiCard>
         </div>
       </section>
 
       <section class="dashboard-section full-width">
-        <h2 class="section-title"><span class="icon">📈</span> Security Analytics</h2>
+        <h2 class="section-title">Cybersecurity Analytics</h2>
         <div class="chart-grid">
-          <div class="chart-container clickable" @click="showModal = 'threatTrend'">
-            <ThreatTrendChart />
+          <div class="chart-container clickable" @click="showModal = 'incidentsTrend'">
+            <CriticalIncidentsTrendChart />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'threatDistribution'">
-            <ThreatDistributionPie />
+          <div class="chart-container clickable" @click="showModal = 'patchCompliance'">
+            <PatchComplianceTrendChart />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'vulnerabilityBar'">
-            <VulnerabilityBarChart />
+          <div class="chart-container clickable" @click="showModal = 'endpointThreats'">
+            <EndpointThreatsBarChart />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'securityScore'">
-            <SecurityScoreGauge />
+          <div class="chart-container clickable" @click="showModal = 'sIEMAlertVolume'">
+            <SIEMAlertVolumeChart />
+          </div>
+          <div class="chart-container clickable" @click="showModal = 'mfaAdoption'">
+            <MFAAdoptionGauge />
           </div>
         </div>
       </section>
 
-      <ChartModal v-if="showModal === 'threatTrend'" @close="showModal = null">
-        <ThreatTrendChart />
+      <ChartModal v-if="showModal === 'incidentsTrend'" @close="showModal = null">
+        <CriticalIncidentsTrendChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'threatDistribution'" @close="showModal = null">
-        <ThreatDistributionPie />
+      <ChartModal v-if="showModal === 'patchCompliance'" @close="showModal = null">
+        <PatchComplianceTrendChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'vulnerabilityBar'" @close="showModal = null">
-        <VulnerabilityBarChart />
+      <ChartModal v-if="showModal === 'endpointThreats'" @close="showModal = null">
+        <EndpointThreatsBarChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'securityScore'" @close="showModal = null">
-        <SecurityScoreGauge />
+      <ChartModal v-if="showModal === 'sIEMAlertVolume'" @close="showModal = null">
+        <SIEMAlertVolumeChart />
+      </ChartModal>
+      <ChartModal v-if="showModal === 'mfaAdoption'" @close="showModal = null">
+        <MFAAdoptionGauge />
       </ChartModal>
     </div>
   </div>
@@ -81,32 +69,34 @@
 
 <script>
 import KpiCard from '../components/KpiCard.vue'
-import ThreatTrendChart from '../components/ThreatTrendChart.vue'
-import ThreatDistributionPie from '../components/ThreatDistributionPie.vue'
-import VulnerabilityBarChart from '../components/VulnerabilityBarChart.vue'
-import SecurityScoreGauge from '../components/SecurityScoreGauge.vue'
+import CriticalIncidentsTrendChart from '../components/CriticalIncidentsTrendChart.vue'
+import PatchComplianceTrendChart from '../components/PatchComplianceTrendChart.vue'
+import EndpointThreatsBarChart from '../components/EndpointThreatsBarChart.vue'
+import SIEMAlertVolumeChart from '../components/SIEMAlertVolumeChart.vue'
+import MFAAdoptionGauge from '../components/MFAAdoptionGauge.vue'
 import ChartModal from '../components/ChartModal.vue'
 
 export default {
-  name: 'Cybersecurity',
+  name: 'CybersecurityDashboard',
   components: {
     KpiCard,
-    ThreatTrendChart,
-    ThreatDistributionPie,
-    VulnerabilityBarChart,
-    SecurityScoreGauge,
+    CriticalIncidentsTrendChart,
+    PatchComplianceTrendChart,
+    EndpointThreatsBarChart,
+    SIEMAlertVolumeChart,
+    MFAAdoptionGauge,
     ChartModal
   },
   data() {
     return {
       showModal: null
-    };
+    }
   }
 }
 </script>
 
 <style scoped>
-.cybersecurity {
+.cybersecurity-dashboard {
   min-height: 100vh;
   background: #1a1b1e;
   padding: 1.5rem;
@@ -179,18 +169,28 @@ export default {
   border-bottom: 1px solid #3a3b3c;
 }
 
-.icon {
-  font-size: 1.25rem;
-  background: linear-gradient(135deg, #50e3c2 0%, #2b6cb0 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .kpi-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  border: 2px solid #222;
+}
+.status-indicator.green {
+  background: #50e3c2;
+  box-shadow: 0 0 4px #50e3c2;
+}
+.status-indicator.yellow {
+  background: #f6ad55;
+  box-shadow: 0 0 4px #f6ad55;
 }
 
 .chart-grid {
@@ -228,18 +228,15 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .cybersecurity {
+  .cybersecurity-dashboard {
     padding: 1rem;
   }
-  
   .main-title {
     font-size: 1.75rem;
   }
-  
   .dashboard-section {
     padding: 1rem;
   }
-  
   .dashboard-header {
     padding: 1rem;
     margin-bottom: 1rem;

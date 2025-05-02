@@ -1,79 +1,67 @@
 <template>
-  <div class="fin-ops">
+  <div class="finops-dashboard">
     <div class="dashboard-header">
-      <h1 class="main-title">Financial Operations Dashboard</h1>
+      <h1 class="main-title">FinOps Dashboard</h1>
       <div class="last-updated">Last updated: {{ new Date().toLocaleString() }}</div>
     </div>
 
     <div class="dashboard-grid">
       <section class="dashboard-section">
-        <h2 class="section-title">
-          <span class="icon">💰</span>
-          Financial KPIs
-        </h2>
+        <h2 class="section-title">Key Metrics</h2>
         <div class="kpi-row">
-          <KpiCard title="Total Budget" :value="'$2.5M'" class="kpi-card" />
-          <KpiCard title="Spent (YTD)" :value="'$1.8M'" class="kpi-card" />
-          <KpiCard title="Remaining" :value="'$700K'" class="kpi-card" />
-          <KpiCard title="Savings" :value="'$120K'" class="kpi-card" />
-        </div>
-      </section>
-
-      <section class="dashboard-section">
-        <h2 class="section-title">
-          <span class="icon">📊</span>
-          Cost Analysis
-        </h2>
-        <div class="kpi-row">
-          <KpiCard title="Infrastructure" :value="'$850K'" class="kpi-card" />
-          <KpiCard title="Software" :value="'$450K'" class="kpi-card" />
-          <KpiCard title="Services" :value="'$320K'" class="kpi-card" />
-          <KpiCard title="Operations" :value="'$180K'" class="kpi-card" />
-        </div>
-      </section>
-
-      <section class="dashboard-section">
-        <h2 class="section-title">
-          <span class="icon">📈</span>
-          Performance
-        </h2>
-        <div class="kpi-row">
-          <KpiCard title="ROI" :value="'245%'" class="kpi-card" />
-          <KpiCard title="Cost per User" :value="'$850'" class="kpi-card" />
-          <KpiCard title="Efficiency" :value="'92%'" class="kpi-card" />
-          <KpiCard title="Optimization" :value="'15%'" class="kpi-card" />
+          <KpiCard title="Monthly Cloud Spend" :value="'₹48.6L'">
+            <template #status><span class="status-indicator red"></span></template>
+          </KpiCard>
+          <KpiCard title="Cost per Application" :value="'₹1.24L'">
+            <template #status><span class="status-indicator yellow"></span></template>
+          </KpiCard>
+          <KpiCard title="Unused Reserved Instances" :value="'₹3.1L'">
+            <template #status><span class="status-indicator red"></span></template>
+          </KpiCard>
+          <KpiCard title="Optimization Opportunities" :value="'9 flagged'">
+            <template #status><span class="status-indicator yellow"></span></template>
+          </KpiCard>
+          <KpiCard title="Budget Utilization" :value="'87%'">
+            <template #status><span class="status-indicator green"></span></template>
+          </KpiCard>
         </div>
       </section>
 
       <section class="dashboard-section full-width">
-        <h2 class="section-title"><span class="icon">📊</span> Financial Analytics</h2>
+        <h2 class="section-title">FinOps Analytics</h2>
         <div class="chart-grid">
-          <div class="chart-container clickable" @click="showModal = 'costTrend'">
-            <CostTrendChart />
+          <div class="chart-container clickable" @click="showModal = 'cloudSpendTrend'">
+            <CloudSpendTrendChart />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'costDistribution'">
-            <CostDistributionPie />
+          <div class="chart-container clickable" @click="showModal = 'costPerApp'">
+            <CostPerApplicationChart />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'budgetVariance'">
-            <BudgetVarianceChart />
+          <div class="chart-container clickable" @click="showModal = 'reservedInstances'">
+            <ReservedInstancesChart />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'savingsForecast'">
-            <SavingsForecastChart />
+          <div class="chart-container clickable" @click="showModal = 'optimizationOpps'">
+            <OptimizationOpportunitiesChart />
+          </div>
+          <div class="chart-container clickable" @click="showModal = 'budgetUtilization'">
+            <BudgetUtilizationGauge />
           </div>
         </div>
       </section>
 
-      <ChartModal v-if="showModal === 'costTrend'" @close="showModal = null">
-        <CostTrendChart />
+      <ChartModal v-if="showModal === 'cloudSpendTrend'" @close="showModal = null">
+        <CloudSpendTrendChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'costDistribution'" @close="showModal = null">
-        <CostDistributionPie />
+      <ChartModal v-if="showModal === 'costPerApp'" @close="showModal = null">
+        <CostPerApplicationChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'budgetVariance'" @close="showModal = null">
-        <BudgetVarianceChart />
+      <ChartModal v-if="showModal === 'reservedInstances'" @close="showModal = null">
+        <ReservedInstancesChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'savingsForecast'" @close="showModal = null">
-        <SavingsForecastChart />
+      <ChartModal v-if="showModal === 'optimizationOpps'" @close="showModal = null">
+        <OptimizationOpportunitiesChart />
+      </ChartModal>
+      <ChartModal v-if="showModal === 'budgetUtilization'" @close="showModal = null">
+        <BudgetUtilizationGauge />
       </ChartModal>
     </div>
   </div>
@@ -81,32 +69,34 @@
 
 <script>
 import KpiCard from '../components/KpiCard.vue'
-import CostTrendChart from '../components/CostTrendChart.vue'
-import CostDistributionPie from '../components/CostDistributionPie.vue'
-import BudgetVarianceChart from '../components/BudgetVarianceChart.vue'
-import SavingsForecastChart from '../components/SavingsForecastChart.vue'
+import CloudSpendTrendChart from '../components/CloudSpendTrendChart.vue'
+import CostPerApplicationChart from '../components/CostPerApplicationChart.vue'
+import ReservedInstancesChart from '../components/ReservedInstancesChart.vue'
+import OptimizationOpportunitiesChart from '../components/OptimizationOpportunitiesChart.vue'
+import BudgetUtilizationGauge from '../components/BudgetUtilizationGauge.vue'
 import ChartModal from '../components/ChartModal.vue'
 
 export default {
-  name: 'FinOps',
+  name: 'FinOpsDashboard',
   components: {
     KpiCard,
-    CostTrendChart,
-    CostDistributionPie,
-    BudgetVarianceChart,
-    SavingsForecastChart,
+    CloudSpendTrendChart,
+    CostPerApplicationChart,
+    ReservedInstancesChart,
+    OptimizationOpportunitiesChart,
+    BudgetUtilizationGauge,
     ChartModal
   },
   data() {
     return {
       showModal: null
-    };
+    }
   }
 }
 </script>
 
 <style scoped>
-.fin-ops {
+.finops-dashboard {
   min-height: 100vh;
   background: #1a1b1e;
   padding: 1.5rem;
@@ -179,18 +169,32 @@ export default {
   border-bottom: 1px solid #3a3b3c;
 }
 
-.icon {
-  font-size: 1.25rem;
-  background: linear-gradient(135deg, #50e3c2 0%, #2b6cb0 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .kpi-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  border: 2px solid #222;
+}
+.status-indicator.green {
+  background: #50e3c2;
+  box-shadow: 0 0 4px #50e3c2;
+}
+.status-indicator.yellow {
+  background: #f6ad55;
+  box-shadow: 0 0 4px #f6ad55;
+}
+.status-indicator.red {
+  background: #fc8181;
+  box-shadow: 0 0 4px #fc8181;
 }
 
 .chart-grid {
@@ -228,18 +232,15 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .fin-ops {
+  .finops-dashboard {
     padding: 1rem;
   }
-  
   .main-title {
     font-size: 1.75rem;
   }
-  
   .dashboard-section {
     padding: 1rem;
   }
-  
   .dashboard-header {
     padding: 1rem;
     margin-bottom: 1rem;

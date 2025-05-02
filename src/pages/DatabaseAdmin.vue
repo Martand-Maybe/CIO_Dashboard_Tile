@@ -9,71 +9,64 @@
       <section class="dashboard-section">
         <h2 class="section-title">
           <span class="icon">📊</span>
-          System KPIs
+          Database KPIs
         </h2>
         <div class="kpi-row">
-          <KpiCard title="DB Instances" :value="68" class="kpi-card" />
-          <KpiCard title="Replication" :value="'98.7%'" class="kpi-card" />
-          <KpiCard title="Query Errors" :value="41" class="kpi-card" />
-          <KpiCard title="Avg Query Time" :value="'128ms'" class="kpi-card" />
+          <KpiCard title="DB Uptime" :value="'99.97%'" theme="success" />
+          <KpiCard title="Query Performance" :value="'1.8s'" theme="success" />
+          <KpiCard title="Backup Success Rate" :value="'98.9%'" theme="success" />
+          <KpiCard title="DB Storage Utilization" :value="'83%'" theme="info" />
+          <KpiCard title="Top Alerting DB" :value="'Oracle – HRMS'" theme="default" />
         </div>
       </section>
 
       <section class="dashboard-section">
         <h2 class="section-title">
-          <span class="icon">⚡</span>
-          Performance
+          <span class="icon">🕹️</span>
+          Controllers
         </h2>
-        <div class="kpi-row">
-          <KpiCard title="CPU Usage" :value="'45%'" class="kpi-card" />
-          <KpiCard title="Memory Usage" :value="'62%'" class="kpi-card" />
-          <KpiCard title="Disk I/O" :value="'78%'" class="kpi-card" />
-          <KpiCard title="Network" :value="'35%'" class="kpi-card" />
-        </div>
-      </section>
-
-      <section class="dashboard-section">
-        <h2 class="section-title">
-          <span class="icon">🛠️</span>
-          Maintenance
-        </h2>
-        <div class="kpi-row">
-          <KpiCard title="Backups" :value="'4/5'" class="kpi-card" />
-          <KpiCard title="Updates" :value="'2'" class="kpi-card" />
-          <KpiCard title="Patches" :value="'3'" class="kpi-card" />
-          <KpiCard title="Health" :value="'98%'" class="kpi-card" />
+        <div class="controller-row">
+          <button class="controller-btn" @click="backupNow">Backup Now</button>
+          <button class="controller-btn" @click="runHealthCheck">Run Health Check</button>
+          <button class="controller-btn" @click="clearAlerts">Clear Alerts</button>
         </div>
       </section>
 
       <section class="dashboard-section full-width">
         <h2 class="section-title"><span class="icon">📈</span> Database Analytics</h2>
         <div class="chart-grid">
+          <div class="chart-container clickable" @click="showModal = 'dbUptime'">
+            <DBUptimeTrendChart />
+          </div>
           <div class="chart-container clickable" @click="showModal = 'queryPerformance'">
-            <QueryPerformanceChart />
+            <QueryPerformanceTrendChart />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'resourceUsage'">
-            <ResourceUsageChart />
+          <div class="chart-container clickable" @click="showModal = 'backupSuccess'">
+            <BackupSuccessRateTrendChart />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'errorDistribution'">
-            <ErrorDistributionChart />
+          <div class="chart-container clickable" @click="showModal = 'storageUtilization'">
+            <StorageUtilizationGauge />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'replicationStatus'">
-            <ReplicationStatusGauge />
+          <div class="chart-container clickable" @click="showModal = 'topAlertingDB'">
+            <TopAlertingDBPieChart />
           </div>
         </div>
       </section>
 
+      <ChartModal v-if="showModal === 'dbUptime'" @close="showModal = null">
+        <DBUptimeTrendChart />
+      </ChartModal>
       <ChartModal v-if="showModal === 'queryPerformance'" @close="showModal = null">
-        <QueryPerformanceChart />
+        <QueryPerformanceTrendChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'resourceUsage'" @close="showModal = null">
-        <ResourceUsageChart />
+      <ChartModal v-if="showModal === 'backupSuccess'" @close="showModal = null">
+        <BackupSuccessRateTrendChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'errorDistribution'" @close="showModal = null">
-        <ErrorDistributionChart />
+      <ChartModal v-if="showModal === 'storageUtilization'" @close="showModal = null">
+        <StorageUtilizationGauge />
       </ChartModal>
-      <ChartModal v-if="showModal === 'replicationStatus'" @close="showModal = null">
-        <ReplicationStatusGauge />
+      <ChartModal v-if="showModal === 'topAlertingDB'" @close="showModal = null">
+        <TopAlertingDBPieChart />
       </ChartModal>
     </div>
   </div>
@@ -86,6 +79,11 @@ import ResourceUsageChart from '../components/ResourceUsageChart.vue'
 import ErrorDistributionChart from '../components/ErrorDistributionChart.vue'
 import ReplicationStatusGauge from '../components/ReplicationStatusGauge.vue'
 import ChartModal from '../components/ChartModal.vue'
+import DBUptimeTrendChart from '../components/DBUptimeTrendChart.vue'
+import QueryPerformanceTrendChart from '../components/QueryPerformanceTrendChart.vue'
+import BackupSuccessRateTrendChart from '../components/BackupSuccessRateTrendChart.vue'
+import StorageUtilizationGauge from '../components/StorageUtilizationGauge.vue'
+import TopAlertingDBPieChart from '../components/TopAlertingDBPieChart.vue'
 
 export default {
   name: 'DatabaseAdmin',
@@ -95,11 +93,27 @@ export default {
     ResourceUsageChart,
     ErrorDistributionChart,
     ReplicationStatusGauge,
-    ChartModal
+    ChartModal,
+    DBUptimeTrendChart,
+    QueryPerformanceTrendChart,
+    BackupSuccessRateTrendChart,
+    StorageUtilizationGauge,
+    TopAlertingDBPieChart
   },
   data() {
     return {
       showModal: null
+    }
+  },
+  methods: {
+    backupNow() {
+      this.$toast && this.$toast('Backup started!');
+    },
+    runHealthCheck() {
+      this.$toast && this.$toast('Health check running...');
+    },
+    clearAlerts() {
+      this.$toast && this.$toast('Alerts cleared!');
     }
   }
 }
@@ -225,6 +239,31 @@ export default {
   border-color: #50e3c2;
   transform: translateY(-2px);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.controller-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: flex-start;
+}
+
+.controller-btn {
+  background: linear-gradient(90deg, #50e3c2 0%, #2b6cb0 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.controller-btn:hover {
+  background: linear-gradient(90deg, #2b6cb0 0%, #50e3c2 100%);
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {

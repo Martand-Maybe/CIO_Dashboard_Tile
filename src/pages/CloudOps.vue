@@ -1,73 +1,69 @@
 <template>
-  <div class="cloud-ops">
+  <div class="cloud-ops-dashboard">
     <div class="dashboard-header">
-      <h1 class="main-title">Cloud Operations Dashboard</h1>
+      <h1 class="main-title">Cloud Ops Dashboard</h1>
       <div class="last-updated">Last updated: {{ new Date().toLocaleString() }}</div>
     </div>
 
     <div class="dashboard-grid">
       <section class="dashboard-section">
-        <h2 class="section-title">
-          <span class="icon">☁️</span>
-          Cloud KPIs
-        </h2>
+        <h2 class="section-title">Key Metrics</h2>
         <div class="kpi-row">
-          <KpiCard title="Total Resources" :value="1247" class="kpi-card" />
-          <KpiCard title="Running Instances" :value="892" class="kpi-card" />
-          <KpiCard title="Cost (MTD)" :value="'$45.2K'" class="kpi-card" />
-          <KpiCard title="Availability" :value="'99.99%'" class="kpi-card" />
+          <KpiCard title="Cloud Uptime" :value="'99.95%'">
+            <template #status><span class="status-indicator green"></span></template>
+          </KpiCard>
+          <KpiCard title="Auto-Scaling Efficiency %" :value="'88%'">
+            <template #status><span class="status-indicator yellow"></span></template>
+          </KpiCard>
+          <KpiCard title="Deployment Success Rate" :value="'97.5%'">
+            <template #status><span class="status-indicator green"></span></template>
+          </KpiCard>
+          <KpiCard title="Cloud Cost Drift" :value="'₹2.3L'">
+            <template #status><span class="status-indicator red"></span></template>
+          </KpiCard>
         </div>
       </section>
 
       <section class="dashboard-section">
-        <h2 class="section-title">
-          <span class="icon">💰</span>
-          Cost Metrics
-        </h2>
-        <div class="kpi-row">
-          <KpiCard title="Compute" :value="'$28.5K'" class="kpi-card" />
-          <KpiCard title="Storage" :value="'$12.3K'" class="kpi-card" />
-          <KpiCard title="Network" :value="'$4.4K'" class="kpi-card" />
-          <KpiCard title="Savings" :value="'$8.2K'" class="kpi-card" />
-        </div>
-      </section>
-
-      <section class="dashboard-section">
-        <h2 class="section-title">
-          <span class="icon">📊</span>
-          Performance
-        </h2>
-        <div class="kpi-row">
-          <KpiCard title="CPU Utilization" :value="'68%'" class="kpi-card" />
-          <KpiCard title="Memory Usage" :value="'72%'" class="kpi-card" />
-          <KpiCard title="Storage Usage" :value="'45%'" class="kpi-card" />
-          <KpiCard title="Network I/O" :value="'1.2TB'" class="kpi-card" />
-        </div>
+        <h2 class="section-title">Top Consuming Service</h2>
+        <div class="top-service">EC2 – AI Workloads</div>
       </section>
 
       <section class="dashboard-section full-width">
-        <h2 class="section-title"><span class="icon">📈</span> Cloud Monitoring</h2>
+        <h2 class="section-title">Cloud Analytics</h2>
         <div class="chart-grid">
-          <div class="chart-container clickable" @click="showModal = 'costTrend'">
-            <CloudCostTrend />
+          <div class="chart-container clickable" @click="showModal = 'uptimeTrend'">
+            <CloudUptimeTrendChart />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'resourceUsage'">
-            <ResourceUsageChart />
+          <div class="chart-container clickable" @click="showModal = 'autoScalingTrend'">
+            <AutoScalingEfficiencyTrendChart />
           </div>
-          <div class="chart-container clickable" @click="showModal = 'serviceHealth'">
-            <ServiceHealthChart />
+          <div class="chart-container clickable" @click="showModal = 'deploymentSuccessTrend'">
+            <DeploymentSuccessTrendChart />
+          </div>
+          <div class="chart-container clickable" @click="showModal = 'costDrift'">
+            <CloudCostDriftGauge />
+          </div>
+          <div class="chart-container clickable" @click="showModal = 'serviceConsumption'">
+            <ServiceConsumptionPieChart />
           </div>
         </div>
       </section>
 
-      <ChartModal v-if="showModal === 'costTrend'" @close="showModal = null">
-        <CloudCostTrend />
+      <ChartModal v-if="showModal === 'uptimeTrend'" @close="showModal = null">
+        <CloudUptimeTrendChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'resourceUsage'" @close="showModal = null">
-        <ResourceUsageChart />
+      <ChartModal v-if="showModal === 'autoScalingTrend'" @close="showModal = null">
+        <AutoScalingEfficiencyTrendChart />
       </ChartModal>
-      <ChartModal v-if="showModal === 'serviceHealth'" @close="showModal = null">
-        <ServiceHealthChart />
+      <ChartModal v-if="showModal === 'deploymentSuccessTrend'" @close="showModal = null">
+        <DeploymentSuccessTrendChart />
+      </ChartModal>
+      <ChartModal v-if="showModal === 'costDrift'" @close="showModal = null">
+        <CloudCostDriftGauge />
+      </ChartModal>
+      <ChartModal v-if="showModal === 'serviceConsumption'" @close="showModal = null">
+        <ServiceConsumptionPieChart />
       </ChartModal>
     </div>
   </div>
@@ -75,30 +71,34 @@
 
 <script>
 import KpiCard from '../components/KpiCard.vue'
-import CloudCostTrend from '../components/CloudCostTrend.vue'
-import ResourceUsageChart from '../components/ResourceUsageChart.vue'
-import ServiceHealthChart from '../components/ServiceHealthChart.vue'
+import CloudUptimeTrendChart from '../components/CloudUptimeTrendChart.vue'
+import AutoScalingEfficiencyTrendChart from '../components/AutoScalingEfficiencyTrendChart.vue'
+import DeploymentSuccessTrendChart from '../components/DeploymentSuccessTrendChart.vue'
+import CloudCostDriftGauge from '../components/CloudCostDriftGauge.vue'
+import ServiceConsumptionPieChart from '../components/ServiceConsumptionPieChart.vue'
 import ChartModal from '../components/ChartModal.vue'
 
 export default {
-  name: 'CloudOps',
+  name: 'CloudOpsDashboard',
   components: {
     KpiCard,
-    CloudCostTrend,
-    ResourceUsageChart,
-    ServiceHealthChart,
+    CloudUptimeTrendChart,
+    AutoScalingEfficiencyTrendChart,
+    DeploymentSuccessTrendChart,
+    CloudCostDriftGauge,
+    ServiceConsumptionPieChart,
     ChartModal
   },
   data() {
     return {
       showModal: null
-    };
+    }
   }
 }
 </script>
 
 <style scoped>
-.cloud-ops {
+.cloud-ops-dashboard {
   min-height: 100vh;
   background: #1a1b1e;
   padding: 1.5rem;
@@ -171,18 +171,38 @@ export default {
   border-bottom: 1px solid #3a3b3c;
 }
 
-.icon {
-  font-size: 1.25rem;
-  background: linear-gradient(135deg, #50e3c2 0%, #2b6cb0 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .kpi-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  border: 2px solid #222;
+}
+.status-indicator.green {
+  background: #50e3c2;
+  box-shadow: 0 0 4px #50e3c2;
+}
+.status-indicator.yellow {
+  background: #f6ad55;
+  box-shadow: 0 0 4px #f6ad55;
+}
+.status-indicator.red {
+  background: #fc8181;
+  box-shadow: 0 0 4px #fc8181;
+}
+
+.top-service {
+  color: #e4e6eb;
+  font-size: 1rem;
+  padding: 0.5rem 0;
 }
 
 .chart-grid {
@@ -220,18 +240,15 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .cloud-ops {
+  .cloud-ops-dashboard {
     padding: 1rem;
   }
-  
   .main-title {
     font-size: 1.75rem;
   }
-  
   .dashboard-section {
     padding: 1rem;
   }
-  
   .dashboard-header {
     padding: 1rem;
     margin-bottom: 1rem;
@@ -240,7 +257,7 @@ export default {
 
 @media (min-width: 1600px) {
   .chart-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 </style>
