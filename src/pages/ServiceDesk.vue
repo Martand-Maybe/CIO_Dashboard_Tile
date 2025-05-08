@@ -1,7 +1,7 @@
 <template>
   <div class="service-desk-dashboard">
     <div class="dashboard-header">
-      <h1 class="main-title">IT Service Desk Dashboard</h1>
+      <h1 class="main-title">Service Desk</h1>
       <div class="last-updated">Last updated: {{ new Date().toLocaleDateString() }}</div>
     </div>
 
