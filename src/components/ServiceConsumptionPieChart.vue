@@ -25,10 +25,10 @@ export default {
   data() {
     return {
       chartData: {
-        labels: ['EC2 – AI Workloads', 'S3 – Storage', 'Lambda – Automation'],
+        labels: ['Laptop Support', 'All other Applications', 'Replicon', 'OneDMS', 'Tax'],
         datasets: [
           {
-            data: [62, 25, 13],
+            data: [81, 57, 42, 39, 37],
             backgroundColor: [
               '#63b3ed',
               '#f6ad55',

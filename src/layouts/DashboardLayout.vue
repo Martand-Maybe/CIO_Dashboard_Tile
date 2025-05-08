@@ -8,6 +8,10 @@
           </button>
         </div>
         <nav>
+          <router-link to="/service-desk" class="nav-link">
+            <span class="material-icons">support_agent</span>
+            <span class="nav-text">Service Desk</span>
+          </router-link>
           <router-link to="/service-quality" class="nav-link">
             <span class="material-icons">dashboard</span>
             <span class="nav-text">Service Quality</span>

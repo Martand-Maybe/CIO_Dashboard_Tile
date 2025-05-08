@@ -21,9 +21,9 @@ export default {
   data() {
     return {
       chartData: {
-        labels: ['North America', 'Europe', 'Asia Pacific', 'Latin America', 'Middle East'],
+        labels: ['India', 'Global', 'United Kingdom', 'United States', 'Poland'],
         datasets: [{
-          data: [35, 30, 20, 10, 5],
+          data: [137, 66, 41, 32, 28],
           backgroundColor: [
             '#50e3c2',
             '#63b3ed',
