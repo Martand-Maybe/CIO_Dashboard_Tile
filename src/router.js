@@ -13,7 +13,7 @@ const routes = [
     path: '/',
     component: DashboardLayout,
     children: [
-      { path: '', redirect: '/service-quality' },
+      { path: '', redirect: '/service-desk' },
       { path: 'service-quality', component: ServiceQuality },
       { path: 'network', component: Network },
       { path: 'cloud-ops', component: CloudOps },
