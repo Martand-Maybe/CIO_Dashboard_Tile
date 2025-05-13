@@ -33,18 +33,23 @@
           <h2 class="section-title">Network Analytics</h2>
           <div class="chart-grid">
             <div class="chart-container clickable" @click="showModal = 'uptimeTrend'">
+              <div class="chart-title">Network Uptime Trend</div>
               <UptimeTrendChart />
             </div>
             <div class="chart-container clickable" @click="showModal = 'packetLossTrend'">
+              <div class="chart-title">Packet Loss Trend</div>
               <PacketLossTrendChart />
             </div>
             <div class="chart-container clickable" @click="showModal = 'latencySites'">
+              <div class="chart-title">High Latency Sites</div>
               <HighLatencySitesChart />
             </div>
             <div class="chart-container clickable" @click="showModal = 'bandwidthUtilization'">
+              <div class="chart-title">Bandwidth Utilization</div>
               <BandwidthUtilizationGauge />
             </div>
             <div class="chart-container clickable" @click="showModal = 'incidentType'">
+              <div class="chart-title">Incident Type Distribution</div>
               <IncidentTypePieChart />
             </div>
           </div>
@@ -52,18 +57,23 @@
       </div>
 
       <ChartModal v-if="showModal === 'uptimeTrend'" @close="showModal = null">
+        <div class="chart-title">Network Uptime Trend</div>
         <UptimeTrendChart />
       </ChartModal>
       <ChartModal v-if="showModal === 'packetLossTrend'" @close="showModal = null">
+        <div class="chart-title">Packet Loss Trend</div>
         <PacketLossTrendChart />
       </ChartModal>
       <ChartModal v-if="showModal === 'latencySites'" @close="showModal = null">
+        <div class="chart-title">High Latency Sites</div>
         <HighLatencySitesChart />
       </ChartModal>
       <ChartModal v-if="showModal === 'bandwidthUtilization'" @close="showModal = null">
+        <div class="chart-title">Bandwidth Utilization</div>
         <BandwidthUtilizationGauge />
       </ChartModal>
       <ChartModal v-if="showModal === 'incidentType'" @close="showModal = null">
+        <div class="chart-title">Incident Type Distribution</div>
         <IncidentTypePieChart />
       </ChartModal>
     </div>

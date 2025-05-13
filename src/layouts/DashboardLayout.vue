@@ -36,6 +36,10 @@
             <span class="material-icons">storage</span>
             <span class="nav-text">Database Admin</span>
           </router-link>
+          <router-link to="/baseline-report" class="nav-link">
+            <span class="material-icons">assessment</span>
+            <span class="nav-text">Baseline Report</span>
+          </router-link>
         </nav>
       </aside>
   
@@ -43,6 +47,14 @@
         <header class="dashboard-header">
           <h1>IT Service Desk Dashboard</h1>
           <p class="updated">Last updated: 5/2/2025</p>
+          <div class="auth-section">
+            <button v-if="!isAuthenticated" @click="loginWithRedirect">Login</button>
+            <div v-else class="user-info">
+              <span class="welcome-message">Welcome {{ user.nickname || user.name || user.email }}.</span>
+              <img :src="user.picture" alt="profile" class="user-avatar" />
+              <button @click="logout({ logoutParams: { returnTo: window.location.origin + '/login' }, federated: true })">Logout</button>
+            </div>
+          </div>
         </header>
   
         <router-view />
@@ -51,12 +63,21 @@
   </template>
   
   <script>
+  import { useAuth0 } from '@auth0/auth0-vue';
+
   export default {
     name: 'DashboardLayout',
     data() {
       return {
         isCollapsed: false
       }
+    },
+    setup() {
+      const { loginWithRedirect, logout, isAuthenticated, isLoading, user } = useAuth0();
+      if (typeof window !== 'undefined' && !isLoading.value && !isAuthenticated.value && window.location.pathname !== '/login') {
+        loginWithRedirect();
+      }
+      return { loginWithRedirect, logout, isAuthenticated, isLoading, user };
     },
     methods: {
       toggleSidebar() {
@@ -201,6 +222,38 @@
   .updated {
     font-size: 14px;
     color: #b0b3b8;
+  }
+  
+  .auth-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .user-name {
+    color: #e4e6eb;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  .welcome-message {
+    color: #50e3c2;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-right: 0.75rem;
   }
   
   @media (max-width: 768px) {

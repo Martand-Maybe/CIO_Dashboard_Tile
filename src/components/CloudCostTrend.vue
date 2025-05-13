@@ -1,44 +1,49 @@
 <template>
   <div class="chart-container">
-    <Bar :data="chartData" :options="chartOptions" />
+    <Line :data="chartData" :options="chartOptions" />
   </div>
 </template>
 
 <script>
 import {
   Chart as ChartJS,
-  BarElement,
+  LineElement,
+  PointElement,
   CategoryScale,
   LinearScale,
   Tooltip,
   Legend
 } from 'chart.js'
-import { Bar } from 'vue-chartjs'
+import { Line } from 'vue-chartjs'
 
-ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend)
+ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend)
 
 export default {
   name: 'CloudCostTrend',
-  components: { Bar },
+  components: { Line },
   data() {
     return {
       chartData: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        labels: [
+          'Jul-23', 'Aug-23', 'Sep-23', 'Oct-23', 'Nov-23', 'Dec-23',
+          'Jan-24', 'Feb-24', 'Mar-24', 'Apr-24', 'May-24', 'Jun-24',
+          'Jul-24', 'Aug-24', 'Sep-24', 'Oct-24', 'Nov-24', 'Dec-24',
+          'Jan-25', 'Feb-25', 'Mar-25'
+        ],
         datasets: [
           {
-            label: 'Compute',
-            backgroundColor: '#50e3c2',
-            data: [28.5, 32.1, 29.8, 31.2, 28.5, 30.1]
-          },
-          {
-            label: 'Storage',
-            backgroundColor: '#63b3ed',
-            data: [12.3, 13.5, 12.8, 13.1, 12.3, 12.9]
-          },
-          {
-            label: 'Network',
-            backgroundColor: '#f6ad55',
-            data: [4.4, 4.8, 4.5, 4.7, 4.4, 4.6]
+            label: 'Actual Invoice',
+            data: [
+              822, 897, 931, 1157, 955, 957, 923, 890, 921, 869, 824, 766,
+              641, 637, 624, 664, 697, 727, 666, 734, 734
+            ],
+            borderColor: '#50e3c2',
+            backgroundColor: 'rgba(80, 227, 194, 0.1)',
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: '#50e3c2',
+            pointBorderColor: '#fff',
+            pointRadius: 4
           }
         ]
       },
@@ -58,22 +63,26 @@ export default {
         scales: {
           x: {
             ticks: {
-              color: '#b0b3b8'
+              color: '#b0b3b8',
+              maxRotation: 45,
+              minRotation: 45
             },
             grid: {
               color: '#3a3b3c'
             }
           },
           y: {
-            beginAtZero: true,
+            beginAtZero: false,
+            min: 600,
+            max: 1300,
+            grid: {
+              color: '#3a3b3c'
+            },
             ticks: {
               color: '#b0b3b8',
               callback: function(value) {
-                return '$' + value + 'K';
+                return '$' + value.toLocaleString() + 'K';
               }
-            },
-            grid: {
-              color: '#3a3b3c'
             }
           }
         }

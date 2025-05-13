@@ -33,36 +33,46 @@
         <h2 class="section-title">Service Analytics</h2>
         <div class="chart-grid">
           <div class="chart-container clickable" @click="showModal = 'ticketVolume'">
+            <div class="chart-title">Ticket Volume Trend</div>
             <TicketVolumeTrendChart />
           </div>
           <div class="chart-container clickable" @click="showModal = 'slaCompliance'">
+            <div class="chart-title">SLA Compliance Trend</div>
             <SLAComplianceTrendChart />
           </div>
           <div class="chart-container clickable" @click="showModal = 'mttrTrend'">
+            <div class="chart-title">MTTR Trend</div>
             <MTTRTrendChart />
           </div>
           <div class="chart-container clickable" @click="showModal = 'customerSatisfaction'">
+            <div class="chart-title">Customer Satisfaction</div>
             <CustomerSatisfactionGauge />
           </div>
           <div class="chart-container clickable" @click="showModal = 'topIssues'">
+            <div class="chart-title">Top Issues Distribution</div>
             <TopIssuesPieChart />
           </div>
         </div>
       </section>
 
       <ChartModal v-if="showModal === 'ticketVolume'" @close="showModal = null">
+        <div class="chart-title">Ticket Volume Trend</div>
         <TicketVolumeTrendChart />
       </ChartModal>
       <ChartModal v-if="showModal === 'slaCompliance'" @close="showModal = null">
+        <div class="chart-title">SLA Compliance Trend</div>
         <SLAComplianceTrendChart />
       </ChartModal>
       <ChartModal v-if="showModal === 'mttrTrend'" @close="showModal = null">
+        <div class="chart-title">MTTR Trend</div>
         <MTTRTrendChart />
       </ChartModal>
       <ChartModal v-if="showModal === 'customerSatisfaction'" @close="showModal = null">
+        <div class="chart-title">Customer Satisfaction</div>
         <CustomerSatisfactionGauge />
       </ChartModal>
       <ChartModal v-if="showModal === 'topIssues'" @close="showModal = null">
+        <div class="chart-title">Top Issues Distribution</div>
         <TopIssuesPieChart />
       </ChartModal>
     </div>

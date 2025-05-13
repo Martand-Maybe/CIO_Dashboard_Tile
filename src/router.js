@@ -7,20 +7,24 @@ import FinOps from './pages/FinOps.vue'
 import Cybersecurity from './pages/Cybersecurity.vue'
 import DatabaseAdmin from './pages/DatabaseAdmin.vue'
 import ServiceDesk from './pages/ServiceDesk.vue'
+import Login from './pages/Login.vue'
+import BaselineReport from './pages/BaselineReport.vue'
 
 const routes = [
   {
     path: '/',
     component: DashboardLayout,
     children: [
-      { path: '', redirect: '/service-desk' },
+      { path: '', redirect: '/login' },
+      { path: 'login', component: Login },
       { path: 'service-quality', component: ServiceQuality },
       { path: 'network', component: Network },
       { path: 'cloud-ops', component: CloudOps },
       { path: 'finops', component: FinOps },
       { path: 'cybersecurity', component: Cybersecurity },
       { path: 'database-admin', component: DatabaseAdmin },
-      { path: 'service-desk', component: ServiceDesk }
+      { path: 'service-desk', component: ServiceDesk },
+      { path: 'baseline-report', component: BaselineReport }
     ]
   }
 ]

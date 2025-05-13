@@ -33,36 +33,46 @@
         <h2 class="section-title">Cloud Analytics</h2>
         <div class="chart-grid">
           <div class="chart-container clickable" @click="showModal = 'uptimeTrend'">
+            <div class="chart-title">Cloud Uptime Trend</div>
             <CloudUptimeTrendChart />
           </div>
           <div class="chart-container clickable" @click="showModal = 'autoScalingTrend'">
+            <div class="chart-title">Auto-Scaling Efficiency Trend</div>
             <AutoScalingEfficiencyTrendChart />
           </div>
           <div class="chart-container clickable" @click="showModal = 'deploymentSuccessTrend'">
+            <div class="chart-title">Deployment Success Trend</div>
             <DeploymentSuccessTrendChart />
           </div>
           <div class="chart-container clickable" @click="showModal = 'costDrift'">
+            <div class="chart-title">Cloud Cost Drift</div>
             <CloudCostDriftGauge />
           </div>
           <div class="chart-container clickable" @click="showModal = 'serviceConsumption'">
+            <div class="chart-title">Service Consumption Distribution</div>
             <ServiceConsumptionPieChart />
           </div>
         </div>
       </section>
 
       <ChartModal v-if="showModal === 'uptimeTrend'" @close="showModal = null">
+        <div class="chart-title">Cloud Uptime Trend</div>
         <CloudUptimeTrendChart />
       </ChartModal>
       <ChartModal v-if="showModal === 'autoScalingTrend'" @close="showModal = null">
+        <div class="chart-title">Auto-Scaling Efficiency Trend</div>
         <AutoScalingEfficiencyTrendChart />
       </ChartModal>
       <ChartModal v-if="showModal === 'deploymentSuccessTrend'" @close="showModal = null">
+        <div class="chart-title">Deployment Success Trend</div>
         <DeploymentSuccessTrendChart />
       </ChartModal>
       <ChartModal v-if="showModal === 'costDrift'" @close="showModal = null">
+        <div class="chart-title">Cloud Cost Drift</div>
         <CloudCostDriftGauge />
       </ChartModal>
       <ChartModal v-if="showModal === 'serviceConsumption'" @close="showModal = null">
+        <div class="chart-title">Service Consumption Distribution</div>
         <ServiceConsumptionPieChart />
       </ChartModal>
     </div>

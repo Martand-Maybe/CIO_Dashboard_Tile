@@ -1,7 +1,13 @@
 <template>
-  <div class="service-desk-dashboard">
+  <div v-if="isLoading" class="service-desk-dashboard">
+    Loading...
+  </div>
+  <div v-else-if="!isAuthenticated" class="service-desk-dashboard">
+    <button @click="loginWithRedirect()">Login to view dashboard</button>
+  </div>
+  <div v-else class="service-desk-dashboard">
     <div class="dashboard-header">
-      <h1 class="main-title">Service Desk</h1>
+      <h1 class="main-title">IT Service Desk Dashboard</h1>
       <div class="last-updated">Last updated: {{ new Date().toLocaleDateString() }}</div>
     </div>
 
@@ -94,6 +100,7 @@
 </template>
 
 <script>
+import { useAuth0 } from '@auth0/auth0-vue';
 import KpiCard from '../components/KpiCard.vue'
 import IncidentsBarChart from '../components/IncidentsBarChart.vue'
 import IncidentsByFunction from '../components/IncidentsByFunction.vue'
@@ -112,6 +119,10 @@ export default {
     ServiceConsumptionPieChart,
     FeedbackGauge,
     ChartModal
+  },
+  setup() {
+    const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+    return { isAuthenticated, isLoading, loginWithRedirect };
   },
   data() {
     return {

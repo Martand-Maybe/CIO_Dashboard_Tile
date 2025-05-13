@@ -31,36 +31,46 @@
         <h2 class="section-title">Cybersecurity Analytics</h2>
         <div class="chart-grid">
           <div class="chart-container clickable" @click="showModal = 'incidentsTrend'">
+            <div class="chart-title">Critical Incidents Trend</div>
             <CriticalIncidentsTrendChart />
           </div>
           <div class="chart-container clickable" @click="showModal = 'patchCompliance'">
+            <div class="chart-title">Patch Compliance Trend</div>
             <PatchComplianceTrendChart />
           </div>
           <div class="chart-container clickable" @click="showModal = 'endpointThreats'">
+            <div class="chart-title">Endpoint Threats</div>
             <EndpointThreatsBarChart />
           </div>
           <div class="chart-container clickable" @click="showModal = 'sIEMAlertVolume'">
+            <div class="chart-title">SIEM Alert Volume</div>
             <SIEMAlertVolumeChart />
           </div>
           <div class="chart-container clickable" @click="showModal = 'mfaAdoption'">
+            <div class="chart-title">MFA Adoption</div>
             <MFAAdoptionGauge />
           </div>
         </div>
       </section>
 
       <ChartModal v-if="showModal === 'incidentsTrend'" @close="showModal = null">
+        <div class="chart-title">Critical Incidents Trend</div>
         <CriticalIncidentsTrendChart />
       </ChartModal>
       <ChartModal v-if="showModal === 'patchCompliance'" @close="showModal = null">
+        <div class="chart-title">Patch Compliance Trend</div>
         <PatchComplianceTrendChart />
       </ChartModal>
       <ChartModal v-if="showModal === 'endpointThreats'" @close="showModal = null">
+        <div class="chart-title">Endpoint Threats</div>
         <EndpointThreatsBarChart />
       </ChartModal>
       <ChartModal v-if="showModal === 'sIEMAlertVolume'" @close="showModal = null">
+        <div class="chart-title">SIEM Alert Volume</div>
         <SIEMAlertVolumeChart />
       </ChartModal>
       <ChartModal v-if="showModal === 'mfaAdoption'" @close="showModal = null">
+        <div class="chart-title">MFA Adoption</div>
         <MFAAdoptionGauge />
       </ChartModal>
     </div>
