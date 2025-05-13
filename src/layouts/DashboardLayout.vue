@@ -74,9 +74,6 @@
     },
     setup() {
       const { loginWithRedirect, logout, isAuthenticated, isLoading, user } = useAuth0();
-      if (typeof window !== 'undefined' && !isLoading.value && !isAuthenticated.value && window.location.pathname !== '/login') {
-        loginWithRedirect();
-      }
       return { loginWithRedirect, logout, isAuthenticated, isLoading, user };
     },
     methods: {
