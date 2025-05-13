@@ -52,7 +52,7 @@
             <div v-else class="user-info">
               <span class="welcome-message">Welcome {{ user.nickname || user.name || user.email }}.</span>
               <img :src="user.picture" alt="profile" class="user-avatar" />
-              <button @click="logout({ logoutParams: { returnTo: window.location.origin + '/login' }, federated: true })">Logout</button>
+              <button @click="logout({ logoutParams: { returnTo: window.location.origin + '/login' } })">Logout</button>
             </div>
           </div>
         </header>
