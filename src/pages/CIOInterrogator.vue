@@ -77,7 +77,7 @@
   pdfjsLib.GlobalWorkerOptions.workerSrc = '/node_modules/pdfjs-dist/build/pdf.worker.js';
   
   export default {
-    name: 'CIOInterrogator',
+    name: 'CioInterrogator',
     data() {
       return {
         userInput: '',
