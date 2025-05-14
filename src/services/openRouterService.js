@@ -1,6 +1,5 @@
-// For local development, use the API key from OpenRouterAPI.txt. For production, use VITE_OPENROUTER_API_KEY env variable.
-const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || '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';
-// const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
+// For all environments, use VITE_OPENROUTER_API_KEY env variable. Do not hardcode secrets.
+const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 export async function processQuery(query, fileContents) {
