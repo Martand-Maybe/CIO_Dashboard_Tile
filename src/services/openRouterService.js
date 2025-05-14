@@ -1,5 +1,6 @@
-// For all environments, use VITE_OPENROUTER_API_KEY env variable. Do not hardcode secrets.
-const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
+// TEMP: Use the new API key from OpenRouterAPI.txt for all environments while debugging Netlify env issues.
+const OPENROUTER_API_KEY = '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';
+// const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 export async function processQuery(query, fileContents) {
@@ -38,7 +39,7 @@ export async function processQuery(query, fileContents) {
         'X-Title': 'CIO Dashboard'
       },
       body: JSON.stringify({
-        model: 'anthropic/claude-3-opus-20240229',
+        model: 'anthropic/claude-3.7-sonnet',
         messages: messages,
         temperature: 0.7,
         max_tokens: 500

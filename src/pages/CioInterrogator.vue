@@ -149,6 +149,13 @@
         this.userInput = prompt;
         // Do not send the message automatically
       },
+      scrollToBottom() {
+        if (this.$refs.messagesContainer) {
+          setTimeout(() => {
+            this.$refs.messagesContainer.scrollTop = this.$refs.messagesContainer.scrollHeight;
+          }, 100);
+        }
+      },
       async handleFileUpload(event) {
         const files = Array.from(event.target.files);
         this.uploadedFiles = [];
@@ -243,8 +250,10 @@
           type: 'user',
           content: userMessage
         });
+        this.scrollToBottom();
         
         this.isLoading = true;
+        this.userInput = '';
         
         try {
           const response = await processQuery(userMessage, this.uploadedFiles);
@@ -252,15 +261,15 @@
             type: 'assistant',
             content: response
           });
+          this.scrollToBottom();
         } catch (error) {
-          console.error('Error getting response:', error);
           this.messages.push({
             type: 'error',
-            content: 'Sorry, there was an error processing your request. Please try again.'
+            content: error.message
           });
+          this.scrollToBottom();
         } finally {
           this.isLoading = false;
-          this.userInput = '';
         }
       },
       getFollowUpsForMessage(message) {
@@ -424,6 +433,8 @@
     flex-direction: column;
     position: relative;
     min-width: 0;
+    height: 100vh;
+    overflow: hidden;
   }
   
   .chat-messages {
@@ -433,6 +444,23 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    padding-bottom: 150px; /* Increased padding at bottom to ensure messages don't hide behind input */
+    height: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: #3a3b3c #1a1b1e;
+  }
+  
+  .chat-messages::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .chat-messages::-webkit-scrollbar-track {
+    background: #1a1b1e;
+  }
+  
+  .chat-messages::-webkit-scrollbar-thumb {
+    background-color: #3a3b3c;
+    border-radius: 4px;
   }
   
   .message {
@@ -513,9 +541,12 @@
     padding: 1rem;
     border-top: 1px solid #3a3b3c;
     background: #1a1b1e;
-    position: sticky;
+    position: fixed;
     bottom: 0;
+    left: 260px; /* Width of sidebar */
+    right: 0;
     z-index: 10;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1); /* Add subtle shadow for depth */
   }
   
   .chat-text-input {
