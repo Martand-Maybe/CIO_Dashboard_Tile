@@ -2,7 +2,7 @@
     <div class="cio-interrogator">
       <aside class="sidebar">
         <div class="sidebar-content">
-          <button class="new-chat-btn" @click="messages = []; uploadedFiles = []">New Chat</button>
+          <button class="new-chat-btn" @click="handleNewChat">New Chat</button>
           <div class="prompts-section">
             <div class="prompts-title">Prompts</div>
             <div v-for="(category, idx) in promptCategories" :key="idx" class="prompt-category">
@@ -78,11 +78,10 @@
   
   export default {
     name: 'CioInterrogator',
+    inject: ['currentChat', 'addNewChat', 'currentChatIndex'],
     data() {
       return {
         userInput: '',
-        messages: [],
-        uploadedFiles: [],
         isLoading: false,
         promptCategories: [
           {
@@ -144,6 +143,24 @@
         }
       };
     },
+    computed: {
+      messages: {
+        get() {
+          return this.currentChat().messages;
+        },
+        set(value) {
+          this.currentChat().messages = value;
+        }
+      },
+      uploadedFiles: {
+        get() {
+          return this.currentChat().uploadedFiles;
+        },
+        set(value) {
+          this.currentChat().uploadedFiles = value;
+        }
+      }
+    },
     methods: {
       usePrompt(prompt) {
         this.userInput = prompt;
@@ -155,6 +172,9 @@
             this.$refs.messagesContainer.scrollTop = this.$refs.messagesContainer.scrollHeight;
           }, 100);
         }
+      },
+      handleNewChat() {
+        this.addNewChat();
       },
       async handleFileUpload(event) {
         const files = Array.from(event.target.files);
