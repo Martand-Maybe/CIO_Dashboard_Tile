@@ -1,14 +1,14 @@
 <template>
-  <div class="finops-dashboard">
-    <div class="dashboard-header">
-      <h1 class="main-title">FinOps Dashboard</h1>
-      <div class="last-updated">Last updated: {{ new Date().toLocaleString() }}</div>
-    </div>
-
-    <div class="dashboard-grid">
-      <section class="dashboard-section">
+    <div class="finops-dashboard">
+      <div class="dashboard-header">
+        <h1 class="main-title">FinOps Dashboard</h1>
+        <div class="last-updated">Last updated: {{ new Date().toLocaleString() }}</div>
+      </div>
+  
+      <div class="dashboard-grid">
+        <section class="dashboard-section">
         <h2 class="section-title">Key Metrics</h2>
-        <div class="kpi-row">
+          <div class="kpi-row">
           <KpiCard title="Monthly Cloud Spend" :value="'₹48.6L'">
             <template #status><span class="status-indicator red"></span></template>
           </KpiCard>
@@ -24,10 +24,10 @@
           <KpiCard title="Budget Utilization" :value="'87%'">
             <template #status><span class="status-indicator green"></span></template>
           </KpiCard>
-        </div>
-      </section>
-
-      <section class="dashboard-section full-width">
+          </div>
+        </section>
+  
+        <section class="dashboard-section full-width">
         <h2 class="section-title">Cloud Cost Trends</h2>
         <div class="trend-summary-row">
           <div class="trend-summary-card">
@@ -71,15 +71,15 @@
           <div class="trend-summary-card">
             <div class="trend-summary-title">Projected Budget FY-26 (12% Growth)</div>
             <div class="trend-summary-value">$9.75M</div>
-          </div>
-        </div>
+            </div>
+            </div>
         <div class="trend-chart-grid">
           <div class="chart-container clickable" @click="showModal = 'cloudCostTrend'">
             <div class="chart-title">Cloud Cost Actual Invoice Trend FY-23 to FY-25</div>
             <CloudCostTrend />
             <div class="axis-label x-axis">Month</div>
             <div class="axis-label y-axis">Cost (USD)</div>
-          </div>
+            </div>
           <div class="chart-container clickable" @click="showModal = 'forecastVsActual'">
             <div class="chart-title">Cloud Cost - Baseline vs Actuals Tracking</div>
             <ForecastVsActual />
@@ -149,122 +149,122 @@
       <ChartModal v-if="showModal === 'budgetUtilization'" @close="showModal = null">
         <div class="chart-title">Budget Utilization</div>
         <BudgetUtilizationGauge />
-      </ChartModal>
+        </ChartModal>
+      </div>
     </div>
-  </div>
-</template>
-
-<script>
-import KpiCard from '../components/KpiCard.vue'
+  </template>
+  
+  <script>
+  import KpiCard from '../components/KpiCard.vue'
 import CloudSpendTrendChart from '../components/CloudSpendTrendChart.vue'
 import CostPerApplicationChart from '../components/CostPerApplicationChart.vue'
 import ReservedInstancesChart from '../components/ReservedInstancesChart.vue'
 import OptimizationOpportunitiesChart from '../components/OptimizationOpportunitiesChart.vue'
 import BudgetUtilizationGauge from '../components/BudgetUtilizationGauge.vue'
-import ChartModal from '../components/ChartModal.vue'
+  import ChartModal from '../components/ChartModal.vue'
 import CloudCostTrend from '../components/CloudCostTrend.vue'
-import ForecastVsActual from '../components/ForecastVsActual.vue'
-
-export default {
+  import ForecastVsActual from '../components/ForecastVsActual.vue'
+  
+  export default {
   name: 'FinOpsDashboard',
-  components: {
-    KpiCard,
+    components: {
+      KpiCard,
     CloudSpendTrendChart,
     CostPerApplicationChart,
     ReservedInstancesChart,
     OptimizationOpportunitiesChart,
     BudgetUtilizationGauge,
-    ChartModal,
+      ChartModal,
     CloudCostTrend,
     ForecastVsActual
-  },
-  data() {
-    return {
-      showModal: null
+    },
+    data() {
+      return {
+        showModal: null
+      }
     }
   }
-}
-</script>
-
-<style scoped>
-.finops-dashboard {
-  min-height: 100vh;
-  background: #1a1b1e;
-  padding: 1.5rem;
-}
-
-.dashboard-header {
-  margin-bottom: 1.5rem;
-  text-align: center;
-  padding: 1rem;
-  background: #242526;
+  </script>
+  
+  <style scoped>
+  .finops-dashboard {
+    min-height: 100vh;
+    background: #1a1b1e;
+    padding: 1.5rem;
+  }
+  
+  .dashboard-header {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    padding: 1rem;
+    background: #242526;
   backdrop-filter: blur(10px);
-  border-radius: 12px;
+    border-radius: 12px;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  border: 1px solid #3a3b3c;
-}
-
-.main-title {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #e4e6eb;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(90deg, #50e3c2 0%, #2b6cb0 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+    border: 1px solid #3a3b3c;
+  }
+  
+  .main-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #e4e6eb;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, #50e3c2 0%, #2b6cb0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   letter-spacing: -0.5px;
-}
-
-.last-updated {
-  color: #b0b3b8;
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.dashboard-grid {
-  display: grid;
-  gap: 1.25rem;
-  max-width: 1800px;
-  margin: 0 auto;
-}
-
-.dashboard-section {
-  background: #242526;
-  border-radius: 12px;
-  padding: 1.25rem;
+  }
+  
+  .last-updated {
+    color: #b0b3b8;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  
+  .dashboard-grid {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 1800px;
+    margin: 0 auto;
+  }
+  
+  .dashboard-section {
+    background: #242526;
+    border-radius: 12px;
+    padding: 1.25rem;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease-in-out;
-  border: 1px solid #3a3b3c;
-}
-
-.dashboard-section:hover {
-  transform: translateY(-2px);
+    border: 1px solid #3a3b3c;
+  }
+  
+  .dashboard-section:hover {
+    transform: translateY(-2px);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
   border-color: #50e3c2;
-}
-
+  }
+  
 .dashboard-section.full-width {
-  grid-column: 1 / -1;
-}
-
-.section-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #e4e6eb;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+    grid-column: 1 / -1;
+  }
+  
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #e4e6eb;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #3a3b3c;
-}
-
-.kpi-row {
-  display: grid;
+    border-bottom: 1px solid #3a3b3c;
+  }
+  
+  .kpi-row {
+    display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-}
+    gap: 1rem;
+  }
 
 .status-indicator {
   display: inline-block;
@@ -287,27 +287,27 @@ export default {
   background: #fc8181;
   box-shadow: 0 0 4px #fc8181;
 }
-
-.chart-grid {
-  display: grid;
+  
+  .chart-grid {
+    display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+    gap: 1rem;
   margin-top: 1rem;
-}
-
-.chart-container {
-  background: #1a1b1e;
-  border-radius: 8px;
-  padding: 0.75rem;
-  border: 1px solid #3a3b3c;
+  }
+  
+  .chart-container {
+    background: #1a1b1e;
+    border-radius: 8px;
+    padding: 0.75rem;
+    border: 1px solid #3a3b3c;
   min-height: 250px;
   height: 250px;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
-}
-
+  }
+  
 .chart-container > * {
   width: 100%;
   height: 100%;
@@ -376,7 +376,7 @@ export default {
   color: #b0b3b8;
   font-size: 0.85rem;
   margin-top: 0.1rem;
-}
+  }
 .trend-chart-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -447,6 +447,6 @@ export default {
   left: 12px;
   top: 50%;
   transform: translateY(-50%) rotate(-90deg);
-}
-</style>
+  }
+  </style>
   

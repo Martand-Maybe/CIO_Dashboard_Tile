@@ -40,6 +40,10 @@
             <span class="material-icons">assessment</span>
             <span class="nav-text">Baseline Report</span>
           </router-link>
+          <a href="#" @click.prevent="openCIOInterrogator" class="nav-link">
+            <span class="material-icons">chat</span>
+            <span class="nav-text">CIO Interrogator</span>
+          </a>
         </nav>
       </aside>
   
@@ -79,6 +83,9 @@
     methods: {
       toggleSidebar() {
         this.isCollapsed = !this.isCollapsed
+      },
+      openCIOInterrogator() {
+        window.open('/cio-interrogator', '_blank');
       }
     }
   }

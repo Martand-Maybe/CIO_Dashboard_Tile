@@ -303,10 +303,24 @@ export default {
   align-items: center;
   justify-content: center;
 }
-.chart-placeholder {
-  color: #b0b3b8;
+.chart-title {
+  color: #50e3c2;
   font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
   text-align: center;
+}
+.chart-container > *:not(.chart-title) {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.chart-container.clickable:hover {
+  border-color: #50e3c2;
+  box-shadow: 0 4px 12px -2px #50e3c2;
+  transform: translateY(-2px) scale(1.03);
 }
 .footer-links {
   margin-top: 1.5rem;
@@ -322,15 +336,6 @@ export default {
 }
 .footer-link:hover {
   color: #2b6cb0;
-}
-.clickable {
-  cursor: pointer;
-  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
-}
-.clickable:hover {
-  border-color: #50e3c2;
-  box-shadow: 0 4px 12px -2px #50e3c2;
-  transform: translateY(-2px) scale(1.03);
 }
 @media (max-width: 1200px) {
   .dashboard-content {
@@ -348,11 +353,17 @@ export default {
   }
   .chart-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
   .chart-container {
     min-height: 260px;
     height: 260px;
     max-height: 320px;
+    padding: 1.2rem;
+  }
+  .chart-title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
   }
 }
 </style> 

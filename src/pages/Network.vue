@@ -262,7 +262,7 @@
       padding: 1rem;
       margin-bottom: 1rem;
     }
-  }
+    }
   
   @media (min-width: 1600px) {
     .chart-grid {

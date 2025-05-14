@@ -9,6 +9,8 @@ import DatabaseAdmin from './pages/DatabaseAdmin.vue'
 import ServiceDesk from './pages/ServiceDesk.vue'
 import Login from './pages/Login.vue'
 import BaselineReport from './pages/BaselineReport.vue'
+import CIOInterrogatorLayout from './layouts/CIOInterrogatorLayout.vue'
+import CIOInterrogator from './pages/CioInterrogator.vue'
 
 const routes = [
   {
@@ -25,6 +27,13 @@ const routes = [
       { path: 'database-admin', component: DatabaseAdmin },
       { path: 'service-desk', component: ServiceDesk },
       { path: 'baseline-report', component: BaselineReport }
+    ]
+  },
+  {
+    path: '/cio-interrogator',
+    component: CIOInterrogatorLayout,
+    children: [
+      { path: '', component: CIOInterrogator }
     ]
   }
 ]
