@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import CIOInterrogator from '../pages/CioInterrogator.vue';
+import CIOInterrogator from '../pages/CIOinterrogator.vue';
 
 const routes = [
   // ... existing routes ...

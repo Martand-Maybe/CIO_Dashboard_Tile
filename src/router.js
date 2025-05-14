@@ -10,7 +10,7 @@ import ServiceDesk from './pages/ServiceDesk.vue'
 import Login from './pages/Login.vue'
 import BaselineReport from './pages/BaselineReport.vue'
 import CIOInterrogatorLayout from './layouts/CIOInterrogatorLayout.vue'
-import CIOInterrogator from './pages/CioInterrogator.vue'
+import CIOInterrogator from './pages/CIOinterrogator.vue'
 
 const routes = [
   {
