@@ -1,0 +1,37 @@
+[
+  {
+    "CVE": "CVE-2025-10101",
+    "Description": "Remote Code Execution in Apache Struts",
+    "Severity": "Critical (CVSS 9.8)",
+    "Affected Apps": [
+      "E-commerce Platform",
+      "Internal HR Portal"
+    ],
+    "Affected Components": [
+      "APP-SRV-01",
+      "APP-SRV-02",
+      "HR-APP-SRV-01"
+    ],
+    "Reported Date": "2025-04-01",
+    "Age Days": 43,
+    "Recommended Action": "Upgrade Apache Struts to version X.Y.Z or apply vendor patch.",
+    "Remediation Status": "Patch testing in UAT environment scheduled for May 15. Production rollout target May 17.",
+    "Owner": "Application Team"
+  },
+  {
+    "CVE": "CVE-2025-20202",
+    "Description": "SQL Injection in Legacy Finance Reporting Web App",
+    "Severity": "Critical (CVSS 9.1)",
+    "Affected Apps": [
+      "Finance Reporting (Legacy)"
+    ],
+    "Affected Components": [
+      "WEB-FIN-LEGACY-01"
+    ],
+    "Reported Date": "2025-03-30",
+    "Age Days": 45,
+    "Recommended Action": "Sanitize input parameters; ideally, rewrite or replace app.",
+    "Remediation Status": "Short-term: WAF rule applied. Long-term: Application rewrite project pending budget approval.",
+    "Owner": "Application Dev / Security"
+  }
+]

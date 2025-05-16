@@ -1,0 +1,32 @@
+[
+  {
+    "Incident #": "INC0078905",
+    "Description": "Critical network switch failure in Data Center A, impacting multiple services.",
+    "Open Time Stamp": "2025-05-15 17:05:00 UTC",
+    "Impacted Network Components": "Device: Network Switch XR-7500 (Data Center A - Core) <br> Segment: Data Center A - Production VLANs 10, 20, 30 <br> Connections: Uplinks to core routers, downlinks to multiple server racks"
+  },
+  {
+    "Incident #": "INC0078912",
+    "Description": "Intermittent packet loss and high latency reported for WAN link between Hyderabad and Bangalore offices.",
+    "Open Time Stamp": "2025-05-15 19:55:00 UTC",
+    "Impacted Network Components": "Connection: MPLS Circuit ID HYD-BLR-002 <br> Devices: Edge Router HYD-ER01, Edge Router BLR-ER01 <br> Segment: Inter-office WAN"
+  },
+  {
+    "Incident #": "INC0078915",
+    "Description": "Complete loss of connectivity to the DMZ firewall, affecting all public-facing web services.",
+    "Open Time Stamp": "2025-05-15 20:45:00 UTC",
+    "Impacted Network Components": "Device: Firewall Cluster FWC-DMZ-01A/B <br> Segment: DMZ Network Segment <br> Connections: Internet gateway links, Internal network links to DMZ"
+  },
+  {
+    "Incident #": "INC0078917",
+    "Description": "BGP routing instability detected with ISP Provider X, causing flapping routes for primary internet egress.",
+    "Open Time Stamp": "2025-05-15 21:10:00 UTC",
+    "Impacted Network Components": "Device: Border Router BR-ISPX-01 <br> Connections: BGP Peering session with ISP Provider X (AS65001) <br> Segment: External Network / Internet Egress Path 1"
+  },
+  {
+    "Incident #": "INC0078919",
+    "Description": "High utilization and performance degradation on the core backbone link between Campus Building 1 and Campus Building 2.",
+    "Open Time Stamp": "2025-05-15 22:00:00 UTC",
+    "Impacted Network Components": "Connection: 10Gbps Fiber Optic Link CB1-CB2-LNK01 <br> Devices: Core Switch CB1-CS01 (Port Te1/0/1), Core Switch CB2-CS01 (Port Te1/0/1) <br> Segment: Campus Backbone Network"
+  }
+] 

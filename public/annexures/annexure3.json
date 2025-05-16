@@ -1,0 +1,62 @@
+[
+  {
+    "Incident ID": "INC0012345",
+    "Date Reported": "2025-05-02",
+    "Age Days": 12,
+    "User Affected": "John Doe (VIP - Sales Director)",
+    "Description": "Desktop PC fails to boot after Windows update (Blue Screen)",
+    "Current Status": "Parts Ordered (Motherboard)",
+    "Reason": "Specialized motherboard replacement on backorder from vendor.",
+    "Assigned Team": "Desktop Support L2 / A. Smith",
+    "Last Update": "2025-05-13",
+    "Next Action ETA": "Awaiting part ETA. Follow up daily. Loaner provided."
+  },
+  {
+    "Incident ID": "INC0012401",
+    "Date Reported": "2025-05-05",
+    "Age Days": 9,
+    "User Affected": "Jane Smith (Finance)",
+    "Description": "Critical accounting software crashing repeatedly, data loss risk",
+    "Current Status": "Vendor Escalation",
+    "Reason": "Issue requires Tier 3 support from software vendor; awaiting analysis.",
+    "Assigned Team": "Application Support / B. Jones",
+    "Last Update": "2025-05-13",
+    "Next Action ETA": "Daily follow-up with vendor. Exploring workaround."
+  },
+  {
+    "Incident ID": "INC0012415",
+    "Date Reported": "2025-05-06",
+    "Age Days": 8,
+    "User Affected": "Robert Brown (Legal)",
+    "Description": "Laptop unable to connect to secure document management system",
+    "Current Status": "Awaiting User Availability",
+    "Reason": "User unavailable for remote troubleshooting due to travel.",
+    "Assigned Team": "Desktop Support L1 / C. Davis",
+    "Last Update": "2025-05-12",
+    "Next Action ETA": "Scheduled session with user for May 15th AM."
+  },
+  {
+    "Incident ID": "INC0012420",
+    "Date Reported": "2025-05-07",
+    "Age Days": 7,
+    "User Affected": "Alice Green (Marketing)",
+    "Description": "Performance extremely slow, graphic design applications unusable",
+    "Current Status": "Further Diagnosis Required",
+    "Reason": "Initial troubleshooting inconclusive. On-site visit required.",
+    "Assigned Team": "Desktop Support L2 / D. Wilson",
+    "Last Update": "2025-05-13",
+    "Next Action ETA": "On-site visit scheduled for May 15th PM."
+  },
+  {
+    "Incident ID": "INC0012301",
+    "Date Reported": "2025-04-28",
+    "Age Days": 16,
+    "User Affected": "Michael Lee (R&D)",
+    "Description": "Specialized CAD software license not activating post-system refresh",
+    "Current Status": "Awaiting Vendor License Reset",
+    "Reason": "Vendor process for license reset taking longer than expected.",
+    "Assigned Team": "IT Licensing / E. White",
+    "Last Update": "2025-05-12",
+    "Next Action ETA": "Escalated with vendor account manager. ETA 2 days."
+  }
+]

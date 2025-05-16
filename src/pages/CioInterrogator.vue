@@ -11,8 +11,8 @@
                 {{ category.name }}
               </div>
               <div class="prompt-list">
-                <button v-for="(prompt, pidx) in category.prompts" :key="pidx" class="prompt-btn" @click="usePrompt(prompt)">
-                  {{ prompt }}
+                <button v-for="(prompt, pidx) in category.prompts" :key="pidx" class="prompt-btn main-prompt-btn" @click="usePrompt(prompt.main)">
+                  {{ prompt.main }}
                 </button>
               </div>
             </div>
@@ -28,7 +28,22 @@
           <div v-for="(message, index) in messages" 
                :key="index" 
                :class="['message', `${message.type}-message`]">
-            <div class="message-content" v-html="message.content"></div>
+            <div class="message-content">
+              <AnnexureTable
+                v-if="message.content === '__ANNEXURE_TABLE__' && lastAnnexureData"
+                :data="lastAnnexureData"
+                :title="lastAnnexureTitle"
+              />
+              <div v-else-if="message.content === '__ANNEXURE_TABLE__' && lastAnnexureSections">
+                <AnnexureTable
+                  v-for="section in lastAnnexureSections"
+                  :key="section.section"
+                  :data="section.arr"
+                  :title="section.section"
+                />
+              </div>
+              <div v-else v-html="message.content"></div>
+            </div>
             <div v-if="message.type === 'assistant' && getFollowUpsForMessage(message) && getFollowUpsForMessage(message).length" class="followup-bar">
               <button v-for="(followup, fidx) in getFollowUpsForMessage(message)" :key="fidx" class="followup-btn" @click="usePrompt(followup)">
                 {{ followup }}
@@ -73,11 +88,13 @@
   import { processQuery } from '../services/openRouterService';
   import mammoth from 'mammoth';
   import * as pdfjsLib from 'pdfjs-dist/build/pdf';
+  import AnnexureTable from '../components/AnnexureTable.vue';
   
   pdfjsLib.GlobalWorkerOptions.workerSrc = '/node_modules/pdfjs-dist/build/pdf.worker.js';
   
   export default {
     name: 'CioInterrogator',
+    components: { AnnexureTable },
     inject: ['currentChat', 'addNewChat', 'currentChatIndex'],
     data() {
       return {
@@ -86,36 +103,101 @@
         promptCategories: [
           {
             name: 'System Health & Performance',
-            icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#50e3c2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 8 12 12 20 16 4 20 12 20 12" /></svg>`,
+            color: 'green',
+            icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#43d675" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>`,
             prompts: [
-              'Which application or infrastructure components have active P1 incidents today?',
-              'Show me P1 and P2 incidents by component with their ageing details.',
-              'What network segments had failures in the last 180 days?',
-              'Give me the network performance report for the past 24 hours — bandwidth, latency, and uptime.',
-              'List all components where monitoring thresholds were breached in the last 24 hours.'
+              {
+                main: 'Which Application/ Infra components are reporting open P1 incidents currently',
+                annexure: 'Annexure 2',
+                subPrompts: [
+                  'Show the Incident profile for the Application/Components (P1/P2 with ageing)',
+                  'Generate communications to SDM to provide an ETA on incident'
+                ]
+              },
+              {
+                main: 'Show the open P1s from network ops (network segments, devices, and connections)',
+                annexure: 'Annexure 1',
+                subPrompts: [
+                  'Double click on failures in the past 180 days for <component>',
+                  'Generate communications to SDM to provide an RCA on incident'
+                ]
+              },
+              {
+                main: 'Network performance report in the past 24 hours – bandwidth utilization, network latency, network uptime report',
+                annexure: 'Annexure 1',
+                subPrompts: [
+                  'Show P1 tickets mapped to incident'
+                ]
+              },
+              {
+                main: 'Application/Infra monitoring and listing of components where monitoring > thresholds, past 24 hours',
+                annexure: 'Annexure 2',
+                subPrompts: [
+                  'Show P1 tickets mapped to incident'
+                ]
+              }
             ]
           },
           {
             name: 'Alerting & Incident Management',
-            icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fc8181" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+            color: 'yellow',
+            icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f6c343" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
             prompts: [
-              'Which P1 desktop incidents have been open for more than 7 days?',
-              'Give me a breakdown of partner-related desktop P1 incidents pending for more than 1 day.'
+              {
+                main: 'P1 desktop incidents ageing > 7 days',
+                annexure: 'Annexure 3',
+                subPrompts: []
+              },
+              {
+                main: 'P1 desktop incidents with Partner profile, ageing > 1 day',
+                annexure: 'Annexure 3',
+                subPrompts: [
+                  'P1 desktop incidents with Executive management profile, ageing > 1 day',
+                  'Generate communications to SDM to provide an ETA on Partner profile P1, ageing > 1 day'
+                ]
+              }
             ]
           },
           {
             name: 'Deployment & Change Management',
-            icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#63b3ed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>`,
+            color: 'orange',
+            icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f6ad43" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>`,
             prompts: [
-              'What were the key change events in the past week and did they trigger any P1 incidents?'
+              {
+                main: 'Change report to cover key events in the past week. Listing',
+                annexure: 'Annexure 4',
+                subPrompts: [
+                  'Any P1 incidents from the applications for which changes were pushed last week'
+                ]
+              }
             ]
           },
           {
             name: 'Security & Compliance',
-            icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f6ad55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+            color: 'red',
+            icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fc4343" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
             prompts: [
-              'How many critical vulnerabilities are unpatched and what apps/infra are they linked to?',
-              'Which vulnerabilities are past their ETA and who is responsible for them?'
+              {
+                main: 'Number of Unpatched Critical Vulnerabilities mapped to apps/infra components',
+                annexure: 'Annexure 5',
+                subPrompts: [
+                  'Items out of ETA/delays from the above list with assigned owners'
+                ]
+              }
+            ]
+          },
+          {
+            name: 'Resourcing and Costs',
+            color: 'blue',
+            icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#43a1fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg>`,
+            prompts: [
+              {
+                main: 'Cloud line items showing anomalous increases/decreases in the past monthly statement',
+                annexure: 'Dashboard or billing data',
+                subPrompts: [
+                  'Double click on details'
+                ]
+              }
             ]
           }
         ],
@@ -140,7 +222,10 @@
             'Show compliance status by app',
             'Show patching status'
           ]
-        }
+        },
+        lastAnnexureData: null,
+        lastAnnexureTitle: '',
+        lastAnnexureSections: null,
       };
     },
     computed: {
@@ -162,8 +247,8 @@
       }
     },
     methods: {
-      usePrompt(prompt) {
-        this.userInput = prompt;
+      usePrompt(text) {
+        this.userInput = text;
         // Do not send the message automatically
       },
       scrollToBottom() {
@@ -262,6 +347,47 @@
         });
       },
       
+      jsonToTable(jsonData) {
+        if (!jsonData || typeof jsonData !== 'object') return '<em>No data</em>';
+
+        const keys = Object.keys(jsonData);
+        const maxLength = Math.max(...keys.map(k => Array.isArray(jsonData[k]) ? jsonData[k].length : 0));
+
+        const thead = `<thead><tr>${keys.map(k => `<th>${k}</th>`).join('')}</tr></thead>`;
+
+        const tbody = `<tbody>${Array.from({ length: maxLength }).map((_, idx) => {
+          return `<tr>${keys.map(k => {
+            let entry = jsonData[k]?.[idx];
+            // Render pills for Priority and Status
+            if (k.toLowerCase().includes('priority') && entry) {
+              const pillClass = entry === 'P1' ? 'pill pill-p1' : 'pill pill-p2';
+              return `<td><span class="${pillClass}">${entry}</span></td>`;
+            }
+            if (k.toLowerCase().includes('status') && entry) {
+              let pillClass = 'pill';
+              if (entry.toLowerCase().includes('active')) pillClass += ' pill-active';
+              else if (entry.toLowerCase().includes('investigation')) pillClass += ' pill-investigation';
+              else pillClass += ' pill-default';
+              return `<td><span class="${pillClass}">${entry}</span></td>`;
+            }
+            return `<td>${this.stringifySummary(entry)}</td>`;
+          }).join('')}</tr>`;
+        }).join('')}</tbody>`;
+
+        return `<div class='annexure-table-scroll'><table class='annexure-table'>${thead}${tbody}</table></div>`;
+      },
+      
+      stringifySummary(value) {
+        if (!value) return '';
+        if (typeof value === 'object') {
+          const summary = Object.entries(value)
+            .map(([key, val]) => `${key}: ${val}`)
+            .join('<br>');
+          return `<div class="cell-object-summary">${summary}</div>`;
+        }
+        return String(value);
+      },
+      
       async sendMessage() {
         if (!this.userInput.trim()) return;
         
@@ -274,6 +400,60 @@
         
         this.isLoading = true;
         this.userInput = '';
+        
+        const annexureMap = {
+          'Which Application/ Infra components are reporting open P1 incidents currently': '/annexures/annexure6.json',
+          'Show the open P1s from network ops (network segments, devices, and connections)': '/annexures/annexure7.json',
+          'Network performance report in the past 24 hours – bandwidth utilization, network latency, network uptime report': '/annexures/annexure1.json',
+          'Application/Infra monitoring and listing of components where monitoring > thresholds, past 24 hours': '/annexures/annexure2.json',
+          'P1 desktop incidents ageing > 7 days': '/annexures/annexure3.json',
+          'Change report to cover key events in the past week. Listing': '/annexures/annexure4.json',
+          'Number of Unpatched Critical Vulnerabilities mapped to apps/infra components': '/annexures/annexure5.json',
+        };
+        
+        if (annexureMap[userMessage]) {
+          try {
+            const res = await fetch(annexureMap[userMessage]);
+            if (!res.ok) throw new Error('Failed to fetch annexure');
+            let data = await res.json();
+            if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'object') {
+              this.lastAnnexureData = data;
+              this.lastAnnexureTitle = userMessage;
+              this.lastAnnexureSections = null;
+              this.messages.push({
+                type: 'assistant',
+                content: '__ANNEXURE_TABLE__'
+              });
+              this.scrollToBottom();
+            } else if (data && typeof data === 'object' && Object.values(data).every(v => Array.isArray(v))) {
+              // Object with sections (each value is an array)
+              this.lastAnnexureData = null;
+              this.lastAnnexureTitle = userMessage;
+              this.lastAnnexureSections = Object.entries(data).map(([section, arr]) => ({ section, arr }));
+              this.messages.push({
+                type: 'assistant',
+                content: '__ANNEXURE_TABLE__'
+              });
+              this.scrollToBottom();
+            } else {
+              let content = this.jsonToTable(data);
+              this.messages.push({
+                type: 'assistant',
+                content
+              });
+              this.scrollToBottom();
+            }
+          } catch (error) {
+            this.messages.push({
+              type: 'error',
+              content: error.message
+            });
+            this.scrollToBottom();
+          } finally {
+            this.isLoading = false;
+          }
+          return;
+        }
         
         try {
           const response = await processQuery(userMessage, this.uploadedFiles);
@@ -301,7 +481,7 @@
           if (this.messages[i].type === 'user') {
             for (const cat of this.promptCategories) {
               for (const prompt of cat.prompts) {
-                if (this.messages[i].content && this.messages[i].content.startsWith(prompt.slice(0, 10))) {
+                if (this.messages[i].content && this.messages[i].content.startsWith(prompt.main.slice(0, 10))) {
                   lastCategory = cat.name;
                   break;
                 }
@@ -523,7 +703,7 @@
   }
   
   .message-content {
-    white-space: pre-wrap;
+    white-space: nowrap;
     word-break: break-word;
   }
   
@@ -635,6 +815,120 @@
   .followup-btn:hover {
     background: #3a3b3c;
     color: #50e3c2;
+  }
+  
+  .annexure-table-scroll {
+    overflow: auto;
+    width: 100%;
+    display: block;
+    border: 2px dashed #50e3c2;
+  }
+  
+  .annexure-table {
+    table-layout: auto;
+    width: auto;
+    min-width: max-content;
+    max-width: unset;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #232733;
+    color: #e4e6eb;
+    font-size: 1rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    border-radius: 12px;
+  }
+  
+  .annexure-table th,
+  .annexure-table td {
+    border: 1px solid #35363a;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    vertical-align: top;
+    white-space: nowrap;
+    /* word-break: break-word; */
+    max-width: 300px;
+  }
+  
+  .annexure-table td {
+    min-width: 200px;
+    max-width: 400px;
+  }
+  
+  .cell-object-summary {
+    white-space: pre-wrap;
+    line-height: 1.5;
+    font-size: 0.95rem;
+  }
+  
+  /* Assistant message content area must allow horizontal scrolling */
+  .assistant-message .message-content {
+    max-height: 500px;
+    overflow-x: auto !important;
+    overflow-y: auto;
+    padding-bottom: 0.5rem;
+    background: transparent;
+    border-radius: 8px;
+    display: block;
+    width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Add horizontal scroll for wide tables */
+  .assistant-message .message-content {
+    overflow-x: auto;
+  }
+  
+  .annexure-table th {
+    background: #232733;
+    color: #3fffd8;
+    border-bottom: 2px solid #3fffd8;
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  .annexure-table tr {
+    border-bottom: 1px solid #2e3340;
+  }
+
+  .annexure-table tr:last-child {
+    border-bottom: none;
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-size: 0.95em;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .pill-p1 {
+    background: #232733;
+    color: #3fffd8;
+    border: 1px solid #3fffd8;
+  }
+
+  .pill-p2 {
+    background: #232733;
+    color: #ffb347;
+    border: 1px solid #ffb347;
+  }
+
+  .pill-active {
+    background: #ff3b3b;
+    color: #fff;
+  }
+
+  .pill-investigation {
+    background: #ffb347;
+    color: #232733;
+  }
+
+  .pill-default {
+    background: #3a3b3c;
+    color: #e4e6eb;
   }
   </style>
   

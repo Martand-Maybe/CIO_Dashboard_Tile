@@ -1,0 +1,32 @@
+[
+  {
+    "Change ID": "CHG0051234",
+    "Date": "2025-05-07",
+    "Status": "Successful",
+    "Component": "Email Gateway Servers (SMTP-GW-01, SMTP-GW-02)",
+    "Description": "Applied security patch (CVE-2025-xxxx) to email gateway appliances.",
+    "Purpose": "To mitigate critical vulnerability identified by vendor.",
+    "Risk Level": "High",
+    "Outcome": "Patch successful. No reported issues. Monitored for 24 hours post-change."
+  },
+  {
+    "Change ID": "CHG0051238",
+    "Date": "2025-05-08",
+    "Status": "Successful",
+    "Component": "Core Network Switch (CORE-SW-01)",
+    "Description": "Upgraded firmware from vX.Y to vX.Z.",
+    "Purpose": "To address known stability issues and enable new L3 features.",
+    "Risk Level": "High",
+    "Outcome": "Firmware upgrade completed within maintenance window. Network stability improved."
+  },
+  {
+    "Change ID": "CHG0051240",
+    "Date": "2025-05-08",
+    "Status": "Successful",
+    "Component": "CRM Production Database (PROD-CRM-DB)",
+    "Description": "Increased provisioned IOPS and upgraded instance class.",
+    "Purpose": "To improve CRM performance during peak load times reported by Sales.",
+    "Risk Level": "Medium",
+    "Outcome": "Performance metrics show 30% reduction in query latency. Positive user feedback."
+  }
+]

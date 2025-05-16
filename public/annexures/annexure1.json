@@ -1,0 +1,211 @@
+{
+  "Overall Network": [
+    {
+      "Metric": "Network Uptime",
+      "Average Value": "99.95%",
+      "Peak Value": "N/A",
+      "Notes": "One brief WAN outage (see below)."
+    }
+  ],
+  "Internet Connectivity": [
+    {
+      "Connection": "ISP Link 1 (Primary - 1 Gbps)",
+      "Metric": "Bandwidth Utilization",
+      "Average Value": "65%",
+      "Peak Value": "85%",
+      "Notes": "Peak during business hours, within acceptable limits."
+    },
+    {
+      "Connection": "ISP Link 1 (Primary - 1 Gbps)",
+      "Metric": "Latency (to 8.8.8.8)",
+      "Average Value": "12 ms",
+      "Peak Value": "25 ms",
+      "Notes": "Normal."
+    },
+    {
+      "Connection": "ISP Link 1 (Primary - 1 Gbps)",
+      "Metric": "Uptime",
+      "Average Value": "100%",
+      "Peak Value": "N/A",
+      "Notes": "Stable."
+    },
+    {
+      "Connection": "ISP Link 2 (Backup - 500 Mbps)",
+      "Metric": "Bandwidth Utilization",
+      "Average Value": "5%",
+      "Peak Value": "10%",
+      "Notes": "Normal (only failover traffic)."
+    },
+    {
+      "Connection": "ISP Link 2 (Backup - 500 Mbps)",
+      "Metric": "Latency (to 8.8.8.8)",
+      "Average Value": "20 ms",
+      "Peak Value": "35 ms",
+      "Notes": "Normal."
+    },
+    {
+      "Connection": "ISP Link 2 (Backup - 500 Mbps)",
+      "Metric": "Uptime",
+      "Average Value": "100%",
+      "Peak Value": "N/A",
+      "Notes": "Stable."
+    }
+  ],
+  "Data Center Core": [
+    {
+      "Device": "Core Switch A",
+      "Metric": "Bandwidth Utilization (Avg across critical ports)",
+      "Average Value": "40%",
+      "Peak Value": "60%",
+      "Notes": "Normal."
+    },
+    {
+      "Device": "Core Switch A",
+      "Metric": "Uptime",
+      "Average Value": "100%",
+      "Peak Value": "N/A",
+      "Notes": "Stable."
+    },
+    {
+      "Device": "Core Switch B",
+      "Metric": "Bandwidth Utilization (Avg across critical ports)",
+      "Average Value": "42%",
+      "Peak Value": "63%",
+      "Notes": "Normal."
+    },
+    {
+      "Device": "Core Switch B",
+      "Metric": "Uptime",
+      "Average Value": "100%",
+      "Peak Value": "N/A",
+      "Notes": "Stable."
+    }
+  ],
+  "WAN Links": [
+    {
+      "Link": "HQ to Branch Office A (MPLS - 100 Mbps)",
+      "Metric": "Bandwidth Utilization",
+      "Average Value": "75%",
+      "Peak Value": "92%",
+      "Notes": "High utilization during peak. Investigating potential need for upgrade."
+    },
+    {
+      "Link": "HQ to Branch Office A (MPLS - 100 Mbps)",
+      "Metric": "Latency",
+      "Average Value": "45 ms",
+      "Peak Value": "70 ms",
+      "Notes": "Latency spikes correlate with peak utilization."
+    },
+    {
+      "Link": "HQ to Branch Office A (MPLS - 100 Mbps)",
+      "Metric": "Uptime",
+      "Average Value": "99.80%",
+      "Peak Value": "N/A",
+      "Notes": "Brief outage (5 mins) at 03:15 AM due to carrier maintenance (notified)."
+    },
+    {
+      "Link": "HQ to Branch Office B (SD-WAN - 50 Mbps)",
+      "Metric": "Bandwidth Utilization",
+      "Average Value": "50%",
+      "Peak Value": "70%",
+      "Notes": "Normal."
+    },
+    {
+      "Link": "HQ to Branch Office B (SD-WAN - 50 Mbps)",
+      "Metric": "Latency",
+      "Average Value": "60 ms",
+      "Peak Value": "85 ms",
+      "Notes": "Acceptable."
+    },
+    {
+      "Link": "HQ to Branch Office B (SD-WAN - 50 Mbps)",
+      "Metric": "Uptime",
+      "Average Value": "100%",
+      "Peak Value": "N/A",
+      "Notes": "Stable."
+    }
+  ],
+  "Critical Application Servers": [
+    {
+      "Server": "CRM Application Server",
+      "Metric": "Latency (from Core)",
+      "Average Value": "5 ms",
+      "Peak Value": "10 ms",
+      "Notes": "Excellent."
+    },
+    {
+      "Server": "CRM Application Server",
+      "Metric": "Uptime (Service Level)",
+      "Average Value": "100%",
+      "Peak Value": "N/A",
+      "Notes": "Service fully available."
+    },
+    {
+      "Server": "ERP Database Server",
+      "Metric": "Latency (from Core)",
+      "Average Value": "7 ms",
+      "Peak Value": "15 ms",
+      "Notes": "Good."
+    },
+    {
+      "Server": "ERP Database Server",
+      "Metric": "Uptime (Service Level)",
+      "Average Value": "99.90%",
+      "Peak Value": "N/A",
+      "Notes": "Brief slowdown reported at 2:00 PM; server logs show high CPU, not network."
+    }
+  ],
+  "Campus Network Building A": [
+    {
+      "Component": "Distribution Switch - Bldg A",
+      "Metric": "Bandwidth Utilization",
+      "Average Value": "30%",
+      "Peak Value": "55%",
+      "Notes": "Normal."
+    },
+    {
+      "Component": "Distribution Switch - Bldg A",
+      "Metric": "Uptime",
+      "Average Value": "100%",
+      "Peak Value": "N/A",
+      "Notes": "Stable."
+    },
+    {
+      "Component": "Wi-Fi Network - Bldg A",
+      "Metric": "Avg. Client Latency",
+      "Average Value": "25 ms",
+      "Peak Value": "60 ms",
+      "Notes": "Some clients reported brief high latency around 11:00 AM; investigating AP density."
+    },
+    {
+      "Component": "Wi-Fi Network - Bldg A",
+      "Metric": "Uptime (Controller)",
+      "Average Value": "100%",
+      "Peak Value": "N/A",
+      "Notes": "Stable."
+    }
+  ],
+  "Cloud Connectivity": [
+    {
+      "Link": "AWS Direct Connect Link 1 (1 Gbps)",
+      "Metric": "Bandwidth Utilization",
+      "Average Value": "55%",
+      "Peak Value": "75%",
+      "Notes": "Normal."
+    },
+    {
+      "Link": "AWS Direct Connect Link 1 (1 Gbps)",
+      "Metric": "Latency (to VPC)",
+      "Average Value": "8 ms",
+      "Peak Value": "15 ms",
+      "Notes": "Excellent."
+    },
+    {
+      "Link": "AWS Direct Connect Link 1 (1 Gbps)",
+      "Metric": "Uptime",
+      "Average Value": "100%",
+      "Peak Value": "N/A",
+      "Notes": "Stable."
+    }
+  ]
+}

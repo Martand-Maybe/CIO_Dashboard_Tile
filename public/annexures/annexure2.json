@@ -1,0 +1,92 @@
+[
+  {
+    "Time of Breach": "10:30 AM - 11:15 AM",
+    "Component Type": "Application",
+    "Component": "E-commerce Portal (Checkout Service)",
+    "Metric": "Avg. Response Time",
+    "Threshold": "< 2 seconds",
+    "Actual": "4.5 seconds",
+    "Duration": "45 minutes",
+    "Notes": "Slow checkout process reported by users. Operations team investigating application logs. Potential DB query optimization needed."
+  },
+  {
+    "Time of Breach": "02:00 PM - 02:30 PM",
+    "Component Type": "Server",
+    "Component": "APP-SRV-05 (Web Server)",
+    "Metric": "CPU Utilization",
+    "Threshold": "> 85%",
+    "Actual": "92% (Peak)",
+    "Duration": "30 minutes",
+    "Notes": "Sluggish response from hosted websites. Auto-scaling group added capacity. Monitoring closely."
+  },
+  {
+    "Time of Breach": "03:15 AM - 03:20 AM",
+    "Component Type": "Network Device",
+    "Component": "WAN Router - Branch Office A",
+    "Metric": "Interface Errors (WAN Port)",
+    "Threshold": "< 10 errors/hr",
+    "Actual": "150 errors",
+    "Duration": "5 minutes",
+    "Notes": "Correlated with brief WAN outage (carrier maintenance). Errors ceased after link stabilization. No current impact."
+  },
+  {
+    "Time of Breach": "09:00 AM - Ongoing",
+    "Component Type": "Database",
+    "Component": "Main_Production_DB",
+    "Metric": "Replication Lag",
+    "Threshold": "< 5 minutes",
+    "Actual": "12 minutes",
+    "Duration": "Ongoing",
+    "Notes": "Critical. Risk of data loss in DR scenario. DBAs actively working to resolve lag. Priority 1."
+  },
+  {
+    "Time of Breach": "11:00 AM - 11:30 AM",
+    "Component Type": "Network Segment",
+    "Component": "Wi-Fi - Building A, Floor 3",
+    "Metric": "Client Connection Drops",
+    "Threshold": "< 5 drops/hr",
+    "Actual": "15 drops",
+    "Duration": "30 minutes",
+    "Notes": "Users experienced intermittent Wi-Fi disconnects. Suspected AP interference or overload. Site survey scheduled."
+  },
+  {
+    "Time of Breach": "04:30 PM - 04:45 PM",
+    "Component Type": "Application",
+    "Component": "Internal CRM",
+    "Metric": "Error Rate",
+    "Threshold": "< 1%",
+    "Actual": "3.50%",
+    "Duration": "15 minutes",
+    "Notes": "Users unable to save new contacts. Issue traced to a recent patch. Rollback initiated. Service restored."
+  },
+  {
+    "Time of Breach": "Throughout Past 24h",
+    "Component Type": "Server",
+    "Component": "BACKUP-SRV-01",
+    "Metric": "Disk Space Usage (D:)",
+    "Threshold": "< 90%",
+    "Actual": "94%",
+    "Duration": "24 hours",
+    "Notes": "Low priority alert. Backups completing but disk needs expansion soon. Ticket raised for planned maintenance."
+  },
+  {
+    "Time of Breach": "01:00 PM - 01:20 PM",
+    "Component Type": "Cloud Service",
+    "Component": "AWS SQS Queue (OrderProcessing)",
+    "Metric": "Approx. Age of Oldest Msg",
+    "Threshold": "< 60 seconds",
+    "Actual": "180 seconds",
+    "Duration": "20 minutes",
+    "Notes": "Order processing delayed. Consumer service scaled up to clear backlog. Resolved."
+  },
+  {
+    "Time of Breach": "08:00 AM - 08:10 AM",
+    "Component Type": "Security",
+    "Component": "NGFW - HQ Perimeter",
+    "Metric": "High Availability (HA) Status",
+    "Threshold": "Active/Standby",
+    "Actual": "Standby/Standby",
+    "Duration": "10 minutes",
+    "Notes": "Both HA members reported as Standby. Auto-failover did not occur as expected. Manually failed over to primary. Investigating HA config."
+  }
+]
