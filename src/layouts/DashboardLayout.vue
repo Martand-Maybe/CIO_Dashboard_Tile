@@ -8,42 +8,34 @@
           </button>
         </div>
         <nav>
-          <router-link to="/service-desk" class="nav-link">
-            <span class="material-icons">support_agent</span>
-            <span class="nav-text">Service Desk</span>
+          <router-link to="/desktop-support" class="nav-link">
+            <span class="material-icons">computer</span>
+            <span class="nav-text">Desktop Support</span>
           </router-link>
-          <router-link to="/service-quality" class="nav-link">
-            <span class="material-icons">dashboard</span>
-            <span class="nav-text">Service Quality</span>
+          <router-link to="/cost-controls" class="nav-link">
+            <span class="material-icons">savings</span>
+            <span class="nav-text">Cost Controls</span>
           </router-link>
-          <router-link to="/network" class="nav-link">
+          <router-link to="/app-support-internal" class="nav-link">
+            <span class="material-icons">build</span>
+            <span class="nav-text">App Support - I&E</span>
+          </router-link>
+          <router-link to="/network-ops" class="nav-link">
             <span class="material-icons">router</span>
-            <span class="nav-text">Network</span>
+            <span class="nav-text">Network Ops</span>
           </router-link>
-          <router-link to="/cloud-ops" class="nav-link">
-            <span class="material-icons">cloud</span>
-            <span class="nav-text">Cloud Ops</span>
-          </router-link>
-          <router-link to="/finops" class="nav-link">
-            <span class="material-icons">account_balance</span>
-            <span class="nav-text">FinOps</span>
-          </router-link>
-          <router-link to="/cybersecurity" class="nav-link">
+          <router-link to="/information-security" class="nav-link">
             <span class="material-icons">security</span>
-            <span class="nav-text">Cybersecurity</span>
+            <span class="nav-text">Information Security</span>
           </router-link>
-          <router-link to="/database-admin" class="nav-link">
-            <span class="material-icons">storage</span>
-            <span class="nav-text">Database Admin</span>
+          <router-link to="/cloud-infra-ops" class="nav-link">
+            <span class="material-icons">cloud</span>
+            <span class="nav-text">Cloud Infra Ops</span>
           </router-link>
-          <router-link to="/baseline-report" class="nav-link">
-            <span class="material-icons">assessment</span>
-            <span class="nav-text">Baseline Report</span>
-          </router-link>
-          <a href="#" @click.prevent="openCIOInterrogator" class="nav-link">
+          <router-link to="/cio-interrogator" class="nav-link cio-interrogator-link">
             <span class="material-icons">chat</span>
             <span class="nav-text">CIO Interrogator</span>
-          </a>
+          </router-link>
         </nav>
       </aside>
   
@@ -59,6 +51,7 @@
               <button @click="logout({ logoutParams: { returnTo: window.location.origin + '/login' } })">Logout</button>
             </div>
           </div>
+          <button class="clear-chat-storage-btn" @click="clearChatStorage">Clear Chat Storage</button>
         </header>
   
         <router-view />
@@ -86,6 +79,10 @@
       },
       openCIOInterrogator() {
         window.open('/cio-interrogator', '_blank');
+      },
+      clearChatStorage() {
+        localStorage.removeItem('cio-chat-state');
+        this.$toast && this.$toast('Chat memory cleared!', { type: 'success' });
       }
     }
   }
@@ -258,6 +255,32 @@
     font-size: 1.1rem;
     font-weight: 600;
     margin-right: 0.75rem;
+  }
+  
+  .cio-interrogator-link {
+    margin-top: 1.5rem;
+    background-color: #50e3c2;
+    color: #1a1b1e;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .cio-interrogator-link:hover {
+    background-color: #3fcfb2;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .clear-chat-storage-btn {
+    background-color: #50e3c2;
+    color: #1a1b1e;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .clear-chat-storage-btn:hover {
+    background-color: #3fcfb2;
   }
   
   @media (max-width: 768px) {

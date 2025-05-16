@@ -11,6 +11,12 @@ import Login from './pages/Login.vue'
 import BaselineReport from './pages/BaselineReport.vue'
 import CIOInterrogatorLayout from './layouts/CIOInterrogatorLayout.vue'
 import CioInterrogator from './pages/CioInterrogator.vue'
+import DesktopSupport from './pages/DesktopSupport.vue'
+import CostControls from './pages/CostControls.vue'
+import AppSupportInternal from './pages/AppSupportInternal.vue'
+import NetworkOps from './pages/NetworkOps.vue'
+import InformationSecurity from './pages/InformationSecurity.vue'
+import CloudInfraOps from './pages/CloudInfraOps.vue'
 const routes = [
   {
     path: '/',
@@ -25,7 +31,13 @@ const routes = [
       { path: 'cybersecurity', component: Cybersecurity },
       { path: 'database-admin', component: DatabaseAdmin },
       { path: 'service-desk', component: ServiceDesk },
-      { path: 'baseline-report', component: BaselineReport }
+      { path: 'baseline-report', component: BaselineReport },
+      { path: 'desktop-support', component: DesktopSupport },
+      { path: 'cost-controls', component: CostControls },
+      { path: 'app-support-internal', component: AppSupportInternal },
+      { path: 'network-ops', component: NetworkOps },
+      { path: 'information-security', component: InformationSecurity },
+      { path: 'cloud-infra-ops', component: CloudInfraOps }
     ]
   },
   {

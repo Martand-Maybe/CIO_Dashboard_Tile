@@ -2,7 +2,10 @@
     <div class="cio-interrogator">
       <aside class="sidebar">
         <div class="sidebar-content">
-          <button class="new-chat-btn" @click="handleNewChat">New Chat</button>
+          <button class="back-btn" @click="goBack">
+            <span class="material-icons">arrow_back</span>
+            Back to Dashboard
+          </button>
           <div class="prompts-section">
             <div class="prompts-title">Prompts</div>
             <div v-for="(category, idx) in promptCategories" :key="idx" class="prompt-category">
@@ -16,9 +19,6 @@
                 </button>
               </div>
             </div>
-          </div>
-          <div class="chat-history">
-            <!-- Removed previous chat items -->
           </div>
         </div>
       </aside>
@@ -95,11 +95,24 @@
   export default {
     name: 'CioInterrogator',
     components: { AnnexureTable },
-    inject: ['currentChat', 'addNewChat', 'currentChatIndex'],
     data() {
       return {
         userInput: '',
         isLoading: false,
+        messages: [],
+        uploadedFiles: [],
+        chats: [
+          {
+            id: 1,
+            name: 'Chat 1',
+            messages: [],
+            uploadedFiles: [],
+            lastAnnexureData: null,
+            lastAnnexureTitle: '',
+            lastAnnexureSections: null
+          }
+        ],
+        currentChatId: 1,
         promptCategories: [
           {
             name: 'System Health & Performance',
@@ -226,30 +239,15 @@
         lastAnnexureData: null,
         lastAnnexureTitle: '',
         lastAnnexureSections: null,
+        localStorageKey: 'cio-chat-state'
       };
     },
-    computed: {
-      messages: {
-        get() {
-          return this.currentChat().messages;
-        },
-        set(value) {
-          this.currentChat().messages = value;
-        }
-      },
-      uploadedFiles: {
-        get() {
-          return this.currentChat().uploadedFiles;
-        },
-        set(value) {
-          this.currentChat().uploadedFiles = value;
-        }
-      }
-    },
     methods: {
+      goBack() {
+        this.$router.push('/');
+      },
       usePrompt(text) {
         this.userInput = text;
-        // Do not send the message automatically
       },
       scrollToBottom() {
         if (this.$refs.messagesContainer) {
@@ -258,8 +256,36 @@
           }, 100);
         }
       },
-      handleNewChat() {
-        this.addNewChat();
+      addNewChat() {
+        const newChatId = this.chats.length + 1;
+        this.chats.push({
+          id: newChatId,
+          name: `Chat ${newChatId}`,
+          messages: [],
+          uploadedFiles: [],
+          lastAnnexureData: null,
+          lastAnnexureTitle: '',
+          lastAnnexureSections: null
+        });
+        this.currentChatId = newChatId;
+        this.messages = [];
+        this.uploadedFiles = [];
+        this.lastAnnexureData = null;
+        this.lastAnnexureTitle = '';
+        this.lastAnnexureSections = null;
+        this.saveChatState();
+      },
+      switchChat(chatId) {
+        const chat = this.chats.find(c => c.id === chatId);
+        if (chat) {
+          this.currentChatId = chatId;
+          this.messages = chat.messages;
+          this.uploadedFiles = chat.uploadedFiles;
+          this.lastAnnexureData = chat.lastAnnexureData;
+          this.lastAnnexureTitle = chat.lastAnnexureTitle;
+          this.lastAnnexureSections = chat.lastAnnexureSections;
+          this.scrollToBottom();
+        }
       },
       async handleFileUpload(event) {
         const files = Array.from(event.target.files);
@@ -296,6 +322,7 @@
             });
           }
         }
+        this.saveChatState();
       },
       
       readFileContent(file) {
@@ -400,6 +427,7 @@
         
         this.isLoading = true;
         this.userInput = '';
+        this.saveChatState();
         
         const annexureMap = {
           'Which Application/ Infra components are reporting open P1 incidents currently': '/annexures/annexure6.json',
@@ -436,12 +464,12 @@
               });
               this.scrollToBottom();
             } else {
-              let content = this.jsonToTable(data);
-              this.messages.push({
-                type: 'assistant',
-                content
-              });
-              this.scrollToBottom();
+            let content = this.jsonToTable(data);
+            this.messages.push({
+              type: 'assistant',
+              content
+            });
+            this.scrollToBottom();
             }
           } catch (error) {
             this.messages.push({
@@ -451,6 +479,7 @@
             this.scrollToBottom();
           } finally {
             this.isLoading = false;
+            this.saveChatState();
           }
           return;
         }
@@ -470,6 +499,7 @@
           this.scrollToBottom();
         } finally {
           this.isLoading = false;
+          this.saveChatState();
         }
       },
       getFollowUpsForMessage(message) {
@@ -491,6 +521,75 @@
           }
         }
         return this.followUpSuggestions[lastCategory] || [];
+      },
+      saveChatState() {
+        try {
+          const state = {
+            chats: this.chats,
+            currentChatId: this.currentChatId
+          };
+          localStorage.setItem(this.localStorageKey, JSON.stringify(state));
+        } catch (e) {}
+      },
+      restoreChatState() {
+        try {
+          const state = JSON.parse(localStorage.getItem(this.localStorageKey));
+          if (state && Array.isArray(state.chats)) {
+            this.chats = state.chats;
+            this.currentChatId = state.currentChatId || 1;
+            const currentChat = this.chats.find(c => c.id === this.currentChatId);
+            if (currentChat) {
+              this.messages = currentChat.messages;
+              this.uploadedFiles = currentChat.uploadedFiles;
+              this.lastAnnexureData = currentChat.lastAnnexureData;
+              this.lastAnnexureTitle = currentChat.lastAnnexureTitle;
+              this.lastAnnexureSections = currentChat.lastAnnexureSections;
+            }
+          }
+        } catch (e) {}
+      },
+      closeChat(chatId) {
+        this.chats = this.chats.filter(c => c.id !== chatId);
+        if (this.currentChatId === chatId) {
+          this.currentChatId = this.chats.length > 0 ? this.chats[0].id : null;
+        }
+        this.saveChatState();
+      }
+    },
+    mounted() {
+      this.restoreChatState();
+      const { prefill } = this.$route.query;
+      if (prefill) {
+        this.userInput = prefill;
+      }
+    },
+    beforeRouteUpdate(to, from, next) {
+      next();
+      const { prefill } = to.query;
+      if (prefill) {
+        this.userInput = prefill;
+      }
+    },
+    watch: {
+      messages: {
+        handler() {
+          const currentChat = this.chats.find(c => c.id === this.currentChatId);
+          if (currentChat) {
+            currentChat.messages = this.messages;
+            currentChat.uploadedFiles = this.uploadedFiles;
+            currentChat.lastAnnexureData = this.lastAnnexureData;
+            currentChat.lastAnnexureTitle = this.lastAnnexureTitle;
+            currentChat.lastAnnexureSections = this.lastAnnexureSections;
+          }
+          this.saveChatState();
+        },
+        deep: true
+      },
+      uploadedFiles: {
+        handler() {
+          this.saveChatState();
+        },
+        deep: true
       }
     }
   };
@@ -515,6 +614,74 @@
     flex-direction: column;
   }
   
+  .top-chat-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    background-color: #242526;
+    padding: 0.5rem;
+    border-radius: 8px;
+    align-items: center;
+  }
+  
+  .chat-tab {
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    background-color: #3a3b3c;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .chat-tab:hover {
+    background-color: #4a4b4c;
+  }
+
+  .chat-tab.active {
+    background-color: #50e3c2;
+    color: #1a1b1e;
+  }
+
+  .tab-close {
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #e4e6eb;
+    transition: color 0.2s;
+  }
+
+  .tab-close:hover {
+    color: #ff4d4f;
+  }
+  
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #3a3b3c;
+    color: #e4e6eb;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  
+  .back-btn:hover {
+    background-color: #4a4b4c;
+  }
+  
+  .back-btn .material-icons {
+    font-size: 20px;
+  }
+  
   .sidebar-content {
     padding: 1rem;
     display: flex;
@@ -522,21 +689,6 @@
     gap: 1rem;
     height: 100%;
     overflow: hidden;
-  }
-  
-  .new-chat-btn {
-    background-color: #50e3c2;
-    color: #1a1b1e;
-    border: none;
-    border-radius: 8px;
-    padding: 0.75rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .new-chat-btn:hover {
-    background-color: #3a3b3c;
   }
   
   .prompts-section {
@@ -606,24 +758,6 @@
   }
   
   .prompt-btn:hover {
-    background-color: #4a4b4c;
-  }
-  
-  .chat-history {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .chat-item {
-    padding: 0.5rem;
-    border-radius: 8px;
-    background-color: #3a3b3c;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .chat-item:hover {
     background-color: #4a4b4c;
   }
   
@@ -929,6 +1063,85 @@
   .pill-default {
     background: #3a3b3c;
     color: #e4e6eb;
+  }
+
+  .highlighted-cio-btn {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .cio-btn {
+    background-color: #ff4d4f;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .cio-btn:hover {
+    background-color: #e43e3e;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .multi-chat-tabs {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    background: #232733;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #3a3b3c;
+  }
+  .chat-tab {
+    background-color: #3a3b3c;
+    color: #b0b3b8;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    min-width: 100px;
+    justify-content: space-between;
+  }
+  .chat-tab.active {
+    background-color: #50e3c2;
+    color: #1a1b1e;
+  }
+  .tab-close {
+    opacity: 0.7;
+    font-size: 1.2rem;
+    line-height: 1;
+    padding: 2px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .tab-close:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #ff4d4f;
+  }
+  .new-chat-btn {
+    background-color: #50e3c2;
+    color: #1a1b1e;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+    margin-left: 0.5rem;
+  }
+  .new-chat-btn:hover {
+    background-color: #3a3b3c;
+    color: #50e3c2;
   }
   </style>
   

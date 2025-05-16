@@ -10,6 +10,7 @@
           Chat {{ index + 1 }}
           <span class="tab-close" @click.stop="removeChat(index)" title="Close chat">&times;</span>
         </div>
+        <button class="new-chat-btn" @click="addNewChat">New Chat</button>
       </div>
     </header>
     <main class="cio-main">
@@ -145,6 +146,24 @@ export default {
 
 .tab-close:hover {
   background-color: rgba(0, 0, 0, 0.2);
+}
+
+.new-chat-btn {
+  background-color: #50e3c2;
+  color: #1a1b1e;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+  margin-left: 0.5rem;
+}
+
+.new-chat-btn:hover {
+  background-color: #3a3b3c;
+  color: #50e3c2;
 }
 
 .cio-main {
